@@ -1,37 +1,36 @@
 import pygame
-import random
-import math
-from abc import ABC, abstractmethod
+try:
+    if Player is None or Box is None:
+        from classes import Player, Box
+    else:
+        from opp_dim import Player, Box
+except NameError:
+    from classes import Player, Box
 
-pygame.init()
+def main(screen):
+    clock = pygame.time.Clock()
 
-screen = pygame.display.set_mode((800, 600))
-pygame.display.set_caption("Norm Dimensional Simulation")
-clock = pygame.time.Clock()
+    running = True
+    global player, box
+    player = Player(400, 300, None)
+    box = Box(200, 150)
 
-class Bullet:
-    def __init__(self, x, y, rot, speed=10):
-        self.x = x
-        self.y = y
-        self.rot = rot
-        self.speed = speed
-        self.img = pygame.Surface((5, 5))
-        self.img.fill((255, 0, 0))
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if box.rect.colliderect(player.rect):
+                keys = pygame.key.get_pressed()
+                box.move(player, keys)
 
-    def move(self):
-        rad = math.radians(self.rot)
-        self.x += self.speed * math.cos(rad)
-        self.y += self.speed * math.sin(rad)
+        keys = pygame.key.get_pressed()
+        player.move(keys)
 
-class Base:
-    def __init__(self, x, y, rot, life):
-        self.x = x
-        self.y = y
-        self.rot = rot
-        self.life = life
-        self.img = None
+        screen.fill((0, 0, 0))
+        player.draw(screen, player.x, player.y)
+        box.draw(screen, box.x, box.y)
 
-    def bullet_collide(self, bullet):
-        bullet_rect = bullet.img.get_rect(topleft=(bullet.x, bullet.y))
+        pygame.display.flip()
+        clock.tick(60)
 
-class Player:
+    pygame.quit()
