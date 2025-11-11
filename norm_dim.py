@@ -19,18 +19,15 @@ def main(screen):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            if box.rect.colliderect(player.rect):
-                keys = pygame.key.get_pressed()
-                box.move(player, keys)
 
         keys = pygame.key.get_pressed()
-        player.move(keys)
+
+        # Player.move now handles pushing the box when it collides.
+        player.move(box, keys)
 
         screen.fill((0, 0, 0))
-        player.draw(screen, player.x, player.y)
-        box.draw(screen, box.x, box.y)
+        player.draw(screen)
+        box.draw(screen)
 
         pygame.display.flip()
         clock.tick(60)
-
-    pygame.quit()

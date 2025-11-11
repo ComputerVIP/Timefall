@@ -8,24 +8,22 @@ def main(screen):
     clock = pygame.time.Clock()
 
     running = True
-    player = Player(400, 300, None)
-    box = Box(200, 150)
+    global player, box
+    player.original_img = pygame.Surface((30, 30))
 
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            if box.get_rect().colliderect(player.get_rect()):
-                box.move(player.speed)
 
         keys = pygame.key.get_pressed()
-        player.move(keys)
+
+        # Player.move now handles pushing the box when it collides.
+        player.move(box, keys)
 
         screen.fill((0, 0, 0))
-        player.draw(screen, player.x, player.y)
-        box.draw(screen, box.x, box.y)
+        player.draw(screen)
+        box.draw(screen)
 
         pygame.display.flip()
         clock.tick(60)
-
-    pygame.quit()

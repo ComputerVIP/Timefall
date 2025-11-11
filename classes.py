@@ -2,10 +2,10 @@ import pygame
 from math import atan2, degrees
 
 class Base:
-    def __init__(self, x, y, rot):
+    def __init__(self, x, y, state=0):  # Make state optional with default
         self.x = x
         self.y = y
-        self.rot = rot
+        self.state = state
         self.img = None
 
     def get_rect(self):
@@ -14,76 +14,106 @@ class Base:
             return rect
         return pygame.Rect(self.x, self.y, 0, 0)
     
-
     def move(self, dx, dy):
         self.x += dx
         self.y += dy
 
 class Player(Base):
     def __init__(self, x, y, state):
-        self.state = state
-        self.x = x
-        self.y = y
+        super().__init__(x, y, state)  # Initialize Base
         self.speed = 5
 
         # Load original only once
         self.original_img = pygame.image.load('Resources\\ply_test.png')
-        self.img = self.original_img
+        self.img = self.original_img  # Set the img for Base class
 
-        self.rect = self.img.get_rect(center=(self.x, self.y))
-
-    def draw(self, surface, x, y):
-        # Update rect position based on x/y movement
-        self.rect.center = (self.x, self.y)
-
+    def draw(self, surface):
         # Mouse angle
         mx, my = pygame.mouse.get_pos()
-        dx = mx - self.rect.centerx
-        dy = my - self.rect.centery
+        rect = self.get_rect()  # Get current positioned rect
+        dx = mx - rect.centerx
+        dy = my - rect.centery
 
         angle = degrees(atan2(-dy, dx)) - 90
 
         # Rotate from ORIGINAL only
         self.img = pygame.transform.rotate(self.original_img, angle)
 
-        # Keep corrected center
-        self.rect = self.img.get_rect(center=self.rect.center)
+        # Get new rect for rotated image
+        new_rect = self.img.get_rect(center=(self.x, self.y))
 
         # Draw
-        surface.blit(self.img, self.rect)
+        surface.blit(self.img, new_rect)
 
-    def move(self, keys):
+    def move(self, box, keys):
+        # Compute desired move
+        dx, dy = 0, 0
         if keys[pygame.K_w]:
-            self.y -= self.speed
+            dy -= self.speed
         if keys[pygame.K_s]:
-            self.y += self.speed
+            dy += self.speed
         if keys[pygame.K_a]:
-            self.x -= self.speed
+            dx -= self.speed
         if keys[pygame.K_d]:
-            self.x += self.speed
+            dx += self.speed
+
+        # Move X first and handle collision/pushing
+        if dx != 0:
+            self.x += dx
+            if self.get_rect().colliderect(box.get_rect()):
+                # try to push box horizontally; if can't, revert player
+                if not box.move(dx, 0):
+                    self.x -= dx
+
+        # Move Y next and handle collision/pushing
+        if dy != 0:
+            self.y += dy
+            if self.get_rect().colliderect(box.get_rect()):
+                # try to push box vertically; if can't, revert player
+                if not box.move(0, dy):
+                    self.y -= dy
+
+        # Keep player on-screen (clamp)
+        if self.x < 0:
+            self.x = 0 + 32
+        if self.x > 800:
+            self.x = 800 - 32
+        if self.y < 0:
+            self.y = 0 + 32
+        if self.y > 600:
+            self.y = 600 - 32
 
 
 class Box(Base):
     def __init__(self, x, y):
-        super().__init__(x, y, 0)
+        super().__init__(x, y, 0)  # state=0
         self.img = pygame.Surface((30, 30))
-        self.img.fill((255, 0, 0))
-        self.rect = self.img.get_rect(center=(self.x, self.y))
+        self.img.fill((255, 0, 0))  # Set color once in __init__
+        # Don't create separate rect
 
-    def draw(self, surface, x, y):
-        surface.blit(self.img, (x, y))
+    def draw(self, surface):
+        rect = self.get_rect()  # This now returns properly positioned rect
+        surface.blit(self.img, rect)
 
-    def move(self, player, keys):
-        p_x, p_y = 0,0
-        
-        if keys[pygame.K_w]:
-            p_y -= player.speed
-        if keys[pygame.K_s]:
-            p_y += player.speed
-        if keys[pygame.K_a]:
-            p_x -= player.speed
-        if keys[pygame.K_d]:
-            p_x += player.speed
-        
-        self.x += p_x
-        self.y += p_y
+    def move(self, dx, dy):
+        """
+        Move box by dx, dy if there's room. Returns True if box moved, False otherwise.
+        This lets the player attempt to push the box and only move into it if the box can be pushed.
+        """
+        moved = False
+
+        # Attempt horizontal move if requested
+        if dx != 0:
+            new_x = self.x + dx
+            if 32 <= new_x <= 800 - 32:
+                self.x = new_x
+                moved = True
+
+        # Attempt vertical move if requested
+        if dy != 0:
+            new_y = self.y + dy
+            if 32 <= new_y <= 600 - 32:
+                self.y = new_y
+                moved = True
+
+        return moved
