@@ -2,7 +2,7 @@ import pygame
 from math import atan2, degrees
 
 class Base:
-    def __init__(self, x, y, state=0):  # Make state optional with default
+    def __init__(self, x, y, state = 0):
         self.x = x
         self.y = y
         self.state = state
@@ -13,13 +13,14 @@ class Base:
             rect = self.img.get_rect(center=(self.x, self.y))
             return rect
         return pygame.Rect(self.x, self.y, 0, 0)
-    
-    def move(self, dx, dy):
-        self.x += dx
-        self.y += dy
+
+    def draw(self, surface):
+        if self.img:
+            rect = self.get_rect()
+            surface.blit(self.img, rect)
 
 class Player(Base):
-    def __init__(self, x, y, state):
+    def __init__(self, x, y, state = 2):
         super().__init__(x, y, state)  # Initialize Base
         self.speed = 5
 
@@ -85,8 +86,8 @@ class Player(Base):
 
 
 class Box(Base):
-    def __init__(self, x, y):
-        super().__init__(x, y, 0)  # state=0
+    def __init__(self, x, y, state):
+        super().__init__(x, y, state)
         self.img = pygame.Surface((30, 30))
         self.img.fill((255, 0, 0))  # Set color once in __init__
         # Don't create separate rect
@@ -117,3 +118,26 @@ class Box(Base):
                 moved = True
 
         return moved
+    
+class End(Base):
+    def __init__(self, x, y, state, active = False):
+        super().__init__(x, y, state)
+        self.active = active
+        self.img = pygame.Surface((30, 30))
+        self.img.fill((0, 255, 0))
+
+    def next_level(self, player):
+        # Only trigger if colliding, active and the states match (or this end is 'both' state==2)
+        if self.get_rect().colliderect(player.get_rect()) and self.active and (self.state == player.state or self.state == 2):
+            # placeholder: mark reached or print (implement level switching elsewhere)
+            print("End reached for player state", player.state)
+
+class Button(Base):
+    def __init__(self, x, y, state):
+        super().__init__(x, y, state)
+        self.img = pygame.Surface((20, 10))
+        self.img.fill((0, 0, 255))  # Set color once in __init__
+
+    def activate(self, box, end):
+        if self.get_rect().colliderect(box.get_rect()) and self.state == box.state:
+            end.active = True

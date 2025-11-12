@@ -1,0 +1,12 @@
+This is all just to help me keep track of info:
+
+States:
+    0 is normal
+    1 is opposite
+    2 is both, may be useful, but still not planning on it
+
+
+Projects to complete by 15-11:
+    Movement and level geometry
+    Make some tool to help with level geometry, like:
+    If the rectangle the player is on is orange, that they can move, else, they should get warped.
