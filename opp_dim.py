@@ -44,7 +44,7 @@ def main(screen, player=None, box=None, button=None, end=None):
         screen.fill((44, 4, 28))
 
         if player.state in (1, 2):
-            player.draw(screen, (122, 255, 0))
+            player.draw(screen, (215, 38, 56))
         if box.state in (1, 2):
             box.draw(screen)
         if end.state in (1, 2):
