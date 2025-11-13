@@ -4,6 +4,8 @@ import random
 from classes import Player, Box, Button, End
 
 def main(screen, player=None, box=None, button=None, end=None):
+    from maps import map1o
+    walls = map1o()
     # create objects if not provided
     if player is None:
         player = Player(400, 300, 2)
@@ -38,20 +40,22 @@ def main(screen, player=None, box=None, button=None, end=None):
                         box.state = 0 if box.state == 1 else 1
 
         keys = pygame.key.get_pressed()
-        player.move(box, keys)
+        player.move(box, keys, walls)
+        screen.fill((44, 4, 28))
 
-        screen.fill((0, 0, 0))
         if player.state in (1, 2):
-            player.draw(screen)
+            player.draw(screen, (122, 255, 0))
         if box.state in (1, 2):
             box.draw(screen)
         if end.state in (1, 2):
             end.draw(screen)
         if button.state in (1, 2):
             button.draw(screen)
+        for i in walls:
+            i.draw(screen, (227, 178, 60))
         
         button.activate(box, end)
         end.next_level(player)
-
+        
         pygame.display.flip()
         clock.tick(60)

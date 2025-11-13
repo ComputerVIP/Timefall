@@ -11,9 +11,8 @@ def main(screen, player=None, box=None, button=None, end=None):
         button = Button(600, 450, 0)
     if end is None:
         end = End(750, 550, 2, active=False)
-
-    # ensure the player is in this mode so draw() shows it, but don't change other objects
-    #player.state = 0
+    from maps import map1n
+    walls = map1n()
 
     clock = pygame.time.Clock()
     running = True
@@ -34,9 +33,10 @@ def main(screen, player=None, box=None, button=None, end=None):
                         box.state = 1 if box.state == 0 else 0
 
         keys = pygame.key.get_pressed()
-        player.move(box, keys)
+        player.move(box, keys, walls)
+        screen.fill((234, 248, 240))
+        
 
-        screen.fill((0, 0, 0))
         if player.state in (0, 2):
             player.draw(screen)
         if box.state in (0, 2):
@@ -45,6 +45,8 @@ def main(screen, player=None, box=None, button=None, end=None):
             end.draw(screen)
         if button.state in (0, 2):
             button.draw(screen)
+        for i in walls:
+            i.draw(screen, (60, 142, 227))
         
         button.activate(box, end)
         end.next_level(player)

@@ -3,7 +3,7 @@ import pygame
 def main():
     pygame.init()
     screen = pygame.display.set_mode((800, 600))
-    pygame.display.set_caption("Dimensional Simulation Selector")
+    pygame.display.set_caption("Dimensionalw Simulation Selector")
 
     font = pygame.font.Font(None, 36)
     norm_text = font.render("Press Space to play", True, (255, 255, 255))

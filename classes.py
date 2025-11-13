@@ -25,10 +25,12 @@ class Player(Base):
         self.speed = 5
 
         # Load original only once
-        self.original_img = pygame.image.load('Resources\\ply_test.png')
-        self.img = self.original_img  # Set the img for Base class
+        self.original_img = pygame.Surface((30, 30))
+        self.original_img.fill((0, 255, 0))
+        self.img = pygame.Surface((30, 30))
+        self.img.fill((255, 0, 0))
 
-    def draw(self, surface):
+    def draw(self, surface, colour):
         # Mouse angle
         mx, my = pygame.mouse.get_pos()
         rect = self.get_rect()  # Get current positioned rect
@@ -42,11 +44,12 @@ class Player(Base):
 
         # Get new rect for rotated image
         new_rect = self.img.get_rect(center=(self.x, self.y))
+        self.img.fill(colour)
 
         # Draw
         surface.blit(self.img, new_rect)
 
-    def move(self, box, keys):
+    def move(self, box, keys, walls):
         # Compute desired move
         dx, dy = 0, 0
         if keys[pygame.K_w]:
@@ -83,6 +86,17 @@ class Player(Base):
             self.y = 0 + 32
         if self.y > 600:
             self.y = 600 - 32
+        
+        for i in walls:
+            if self.get_rect().colliderect(i.rect):
+                if dx > 0:  # Moving right
+                    self.x = i.rect.left - self.get_rect().width / 2
+                if dx < 0:  # Moving left
+                    self.x = i.rect.right + self.get_rect().width / 2
+                if dy > 0:  # Moving down
+                    self.y = i.rect.top - self.get_rect().height / 2
+                if dy < 0:  # Moving up
+                    self.y = i.rect.bottom + self.get_rect().height / 2
 
 
 class Box(Base):
@@ -141,3 +155,10 @@ class Button(Base):
     def activate(self, box, end):
         if self.get_rect().colliderect(box.get_rect()) and self.state == box.state:
             end.active = True
+
+class Wall:
+    def __init__(self, x, y, width, height):
+        self.rect = pygame.Rect(x, y, width, height)
+
+    def draw(self, surface, colour):
+        pygame.draw.rect(surface, colour, self.rect)
