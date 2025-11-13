@@ -10,3 +10,28 @@ Projects to complete by 15-11:
     Movement and level geometry
     Make some tool to help with level geometry, like:
     If the rectangle the player is on is orange, that they can move, else, they should get warped.
+
+# Example using a hypothetical gif library
+# You might need to install: pip install pygame-gif
+
+import pygame
+from pygame_gif import GifPlayer
+
+pygame.init()
+screen = pygame.display.set_mode((800, 600))
+
+# Load and play GIF
+gif_player = GifPlayer("your_animation.gif")
+gif_player.play()
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+    
+    screen.fill((0, 0, 0))
+    gif_player.draw(screen, (100, 100))
+    pygame.display.flip()
+
+pygame.quit()
