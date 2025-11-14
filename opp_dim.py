@@ -1,20 +1,26 @@
 import pygame
-import math
-import random
 from classes import Player, Box, Button, End
+from maps import *
 
 def main(screen, player=None, box=None, button=None, end=None):
-    from maps import map1o
-    walls = map1o()
+    
     # create objects if not provided
     if player is None:
         player = Player(400, 300, 2)
     if box is None:
         box = Box(200, 150, 1)
     if button is None:
-        button = Button(600, 450, 1)
+        button = Button(500, 350, 1)
     if end is None:
-        end = End(750, 550, 1, active=False)
+        end = End(750, 550, 1, active=False, level = 1)
+    
+    if end.level == 1:
+        walls = map1o()
+    elif end.level == 2:
+        walls = map2o(player, box, button, end)
+    elif end.level == 3:
+        #walls = map3o()
+        pass
 
     # ensure only the player's state switches to this mode
     #player.state = 1
@@ -53,9 +59,17 @@ def main(screen, player=None, box=None, button=None, end=None):
             button.draw(screen)
         for i in walls:
             i.draw(screen, (227, 178, 60))
+
+        level = end.level
         
         button.activate(box, end)
         end.next_level(player)
+
+        if end.level == (level + 1):
+            player.x = 400
+            player.y = 300
+            return screen, player, box, button, end, 'opp'
+            
         
         pygame.display.flip()
         clock.tick(60)

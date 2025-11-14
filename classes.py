@@ -1,6 +1,7 @@
 import pygame
 from math import atan2, degrees
 
+
 class Base:
     def __init__(self, x, y, state = 0):
         self.x = x
@@ -18,6 +19,7 @@ class Base:
         if self.img:
             rect = self.get_rect()
             surface.blit(self.img, rect)
+
 
 class Player(Base):
     def __init__(self, x, y, state = 2):
@@ -142,18 +144,20 @@ class Box(Base):
 
         return moved
     
+    
 class End(Base):
-    def __init__(self, x, y, state, active = False):
+    def __init__(self, x, y, state, active = False, level = 0):
         super().__init__(x, y, state)
         self.active = active
+        self.level = level
         self.img = pygame.Surface((30, 30))
         self.img.fill((0, 255, 0))
 
     def next_level(self, player):
         # Only trigger if colliding, active and the states match (or this end is 'both' state==2)
         if self.get_rect().colliderect(player.get_rect()) and self.active and (self.state == player.state or self.state == 2):
-            # placeholder: mark reached or print (implement level switching elsewhere)
-            print("End reached for player state", player.state)
+            self.level += 1
+
 
 class Button(Base):
     def __init__(self, x, y, state):
@@ -162,8 +166,10 @@ class Button(Base):
         self.img.fill((0, 0, 255))  # Set color once in __init__
 
     def activate(self, box, end):
-        if self.get_rect().colliderect(box.get_rect()) and self.state == box.state:
-            end.active = True
+        if self.get_rect().colliderect(box.get_rect()):
+            if (self.state == box.state) or box.state == 2:
+                end.active = True
+
 
 class Wall:
     def __init__(self, x, y, width, height):
