@@ -38,7 +38,7 @@ def main(screen, player=None, box=None, button=None, end=None):
         
 
         if player.state in (0, 2):
-            player.draw(screen, (38, 215, 197)
+            player.draw(screen, (38, 215, 197))
         if box.state in (0, 2):
             box.draw(screen)
         if end.state in (0, 2):

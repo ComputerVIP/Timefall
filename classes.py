@@ -25,10 +25,8 @@ class Player(Base):
         self.speed = 5
 
         # Load original only once
-        self.original_img = pygame.Surface((30, 30))
-        self.original_img.fill((0, 255, 0))
-        self.img = pygame.Surface((30, 30))
-        self.img.fill((255, 0, 0))
+        self.original_img = pygame.image.load('Resources\\ply_test.png')
+        self.img = self.original_img  # Set the img for Base class
 
     def draw(self, surface, colour):
         # Mouse angle
@@ -37,14 +35,14 @@ class Player(Base):
         dx = mx - rect.centerx
         dy = my - rect.centery
 
-        angle = degrees(atan2(-dy, dx)) - 90
+        angle = degrees(atan2(-dy, dx))
 
         # Rotate from ORIGINAL only
+        self.original_img.fill(colour)
         self.img = pygame.transform.rotate(self.original_img, angle)
 
         # Get new rect for rotated image
         new_rect = self.img.get_rect(center=(self.x, self.y))
-        self.img.fill(colour)
 
         # Draw
         surface.blit(self.img, new_rect)
@@ -89,13 +87,24 @@ class Player(Base):
         
         for i in walls:
             if self.get_rect().colliderect(i.rect):
-                if dx > 0:  # Moving right
+                # Calculate overlap on each side
+                player_rect = self.get_rect()
+                overlap_left = player_rect.right - i.rect.left
+                overlap_right = i.rect.right - player_rect.left
+                overlap_top = player_rect.bottom - i.rect.top
+                overlap_bottom = i.rect.bottom - player_rect.top
+                
+                # Find the minimum overlap (closest edge)
+                min_overlap = min(overlap_left, overlap_right, overlap_top, overlap_bottom)
+                
+                # Push player out from the closest edge
+                if min_overlap == overlap_left and dx > 0:
                     self.x = i.rect.left - self.get_rect().width / 2
-                if dx < 0:  # Moving left
+                elif min_overlap == overlap_right and dx < 0:
                     self.x = i.rect.right + self.get_rect().width / 2
-                if dy > 0:  # Moving down
+                elif min_overlap == overlap_top and dy > 0:
                     self.y = i.rect.top - self.get_rect().height / 2
-                if dy < 0:  # Moving up
+                elif min_overlap == overlap_bottom and dy < 0:
                     self.y = i.rect.bottom + self.get_rect().height / 2
 
 
