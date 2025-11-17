@@ -1,4 +1,5 @@
 import pygame
+from gif_pygame import AnimatedGif
 from classes import Player, Box, Button, End
 from maps import *
 
@@ -46,11 +47,16 @@ def main(screen, player=None, box=None, button=None, end=None):
         if player.state in (0, 2):
             player.draw(screen, (38, 215, 197))
         if box.state in (0, 2):
-            box.draw(screen)
+            box.draw(screen, (102, 82, 62))
         if end.state in (0, 2):
+            if end.active == True:
+                end.gif = AnimatedGif("Resources/goal_active.gif", max_size=(30, 30))
+            else:
+                end.gif = AnimatedGif("Resources/goal_inactive.gif", max_size=(30, 30))
+            end.gif.play()
             end.draw(screen)
         if button.state in (0, 2):
-            button.draw(screen)
+            button.draw(screen, (143, 63, 122))
         for i in walls:
             i.draw(screen, (60, 142, 227))
 

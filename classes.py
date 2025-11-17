@@ -1,4 +1,5 @@
 import pygame
+from gif_pygame.core import Gif
 from math import atan2, degrees
 
 
@@ -117,8 +118,9 @@ class Box(Base):
         self.img.fill((255, 0, 0))  # Set color once in __init__
         # Don't create separate rect
 
-    def draw(self, surface):
+    def draw(self, surface, colour):
         rect = self.get_rect()  # This now returns properly positioned rect
+        self.img.fill(colour)
         surface.blit(self.img, rect)
 
     def move(self, dx, dy):
@@ -146,12 +148,20 @@ class Box(Base):
     
     
 class End(Base):
-    def __init__(self, x, y, state, active = False, level = 0):
+    def __init__(self, x, y, state, active = False, level = 0, gif_path=None):
         super().__init__(x, y, state)
         self.active = active
         self.level = level
         self.img = pygame.Surface((30, 30))
         self.img.fill((0, 255, 0))
+        self.gif = gif_path
+
+    def draw(self, screen):
+        if self.gif:
+            # Draw the animated GIF instead of the surface
+            self.gif.render(screen, (self.x, self.y))
+        else:
+            super().draw(screen)
 
     def next_level(self, player):
         # Only trigger if colliding, active and the states match (or this end is 'both' state==2)
@@ -164,6 +174,11 @@ class Button(Base):
         super().__init__(x, y, state)
         self.img = pygame.Surface((20, 10))
         self.img.fill((0, 0, 255))  # Set color once in __init__
+
+    def draw(self, surface, colour):
+        rect = self.get_rect()  # This now returns properly positioned rect
+        self.img.fill(colour)
+        surface.blit(self.img, rect)
 
     def activate(self, box, end):
         if self.get_rect().colliderect(box.get_rect()):
