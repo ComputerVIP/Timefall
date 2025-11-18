@@ -1,5 +1,4 @@
 import pygame
-from gif_pygame import AnimatedGif
 from classes import Player, Box, Button, End
 from maps import *
 
@@ -13,13 +12,20 @@ def main(screen, player=None, box=None, button=None, end=None):
         button = Button(500, 350, 0)
     if end is None:
         end = End(750, 550, 2, active=False, level=1)
+
     if end.level == 1:
         walls = map1n()
     elif end.level == 2:
         walls = map2n(player, box, button, end)
     elif end.level == 3:
-        #walls = map3n()
-        pass
+        walls, doors = map3n(player, box, button, end)
+    elif end.level == 4:
+        walls = map4n(player, box, button, end)
+
+    try:
+        doors
+    except NameError:
+        doors = []
 
     clock = pygame.time.Clock()
     running = True
@@ -40,7 +46,7 @@ def main(screen, player=None, box=None, button=None, end=None):
                         box.state = 1 if box.state == 0 else 0
 
         keys = pygame.key.get_pressed()
-        player.move(box, keys, walls)
+        player.move(box, keys, walls, doors)
         screen.fill((234, 248, 240))
         
 
@@ -50,19 +56,23 @@ def main(screen, player=None, box=None, button=None, end=None):
             box.draw(screen, (102, 82, 62))
         if end.state in (0, 2):
             if end.active == True:
-                end.gif = AnimatedGif("Resources/goal_active.gif", max_size=(30, 30))
+                end.img.fill((0, 200, 0))
             else:
-                end.gif = AnimatedGif("Resources/goal_inactive.gif", max_size=(30, 30))
-            end.gif.play()
+                end.img.fill((100, 255, 100))
             end.draw(screen)
         if button.state in (0, 2):
             button.draw(screen, (143, 63, 122))
         for i in walls:
             i.draw(screen, (60, 142, 227))
+        for i in doors:
+            if i.active == True:
+                i.draw(screen, (150, 75, 0))
+            else:
+                i.draw(screen, None)
 
         level = end.level
         
-        button.activate(box, end)
+        button.activate(box, end, doors)
         end.next_level(player)
 
         if end.level == (level + 1):

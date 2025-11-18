@@ -1,5 +1,4 @@
 import pygame
-from gif_pygame.core import Gif
 from math import atan2, degrees
 
 
@@ -50,7 +49,7 @@ class Player(Base):
         # Draw
         surface.blit(self.img, new_rect)
 
-    def move(self, box, keys, walls):
+    def move(self, box, keys, walls, doors):
         # Compute desired move
         dx, dy = 0, 0
         if keys[pygame.K_w]:
@@ -110,6 +109,31 @@ class Player(Base):
                 elif min_overlap == overlap_bottom and dy < 0:
                     self.y = i.rect.bottom + self.get_rect().height / 2
 
+        for i in doors:
+            if i.active is True:
+                if self.get_rect().colliderect(i.rect):
+                    # Calculate overlap on each side
+                    player_rect = self.get_rect()
+                    overlap_left = player_rect.right - i.rect.left
+                    overlap_right = i.rect.right - player_rect.left
+                    overlap_top = player_rect.bottom - i.rect.top
+                    overlap_bottom = i.rect.bottom - player_rect.top
+                    
+                    # Find the minimum overlap (closest edge)
+                    min_overlap = min(overlap_left, overlap_right, overlap_top, overlap_bottom)
+                    
+                    # Push player out from the closest edge
+                    if min_overlap == overlap_left and dx > 0:
+                        self.x = i.rect.left - self.get_rect().width / 2
+                    elif min_overlap == overlap_right and dx < 0:
+                        self.x = i.rect.right + self.get_rect().width / 2
+                    elif min_overlap == overlap_top and dy > 0:
+                        self.y = i.rect.top - self.get_rect().height / 2
+                    elif min_overlap == overlap_bottom and dy < 0:
+                        self.y = i.rect.bottom + self.get_rect().height / 2
+            else:
+                continue
+
 
 class Box(Base):
     def __init__(self, x, y, state):
@@ -148,20 +172,12 @@ class Box(Base):
     
     
 class End(Base):
-    def __init__(self, x, y, state, active = False, level = 0, gif_path=None):
+    def __init__(self, x, y, state, active = False, level = 3, gif_path=None):
         super().__init__(x, y, state)
         self.active = active
         self.level = level
         self.img = pygame.Surface((30, 30))
         self.img.fill((0, 255, 0))
-        self.gif = gif_path
-
-    def draw(self, screen):
-        if self.gif:
-            # Draw the animated GIF instead of the surface
-            self.gif.render(screen, (self.x, self.y))
-        else:
-            super().draw(screen)
 
     def next_level(self, player):
         # Only trigger if colliding, active and the states match (or this end is 'both' state==2)
@@ -180,10 +196,13 @@ class Button(Base):
         self.img.fill(colour)
         surface.blit(self.img, rect)
 
-    def activate(self, box, end):
+    def activate(self, box, end, doors):
         if self.get_rect().colliderect(box.get_rect()):
             if (self.state == box.state) or box.state == 2:
                 end.active = True
+                for i in doors:
+                    i.alpha=255
+                    i.active = False
 
 
 class Wall:
@@ -192,3 +211,14 @@ class Wall:
 
     def draw(self, surface, colour):
         pygame.draw.rect(surface, colour, self.rect)
+
+class Door:
+    def __init__(self, x, y, width, height, active=True):
+        self.active = active
+        self.rect = pygame.Rect(x, y, width, height)
+
+    def draw(self, surface, colour):
+        if colour is None:
+            return
+        else:
+            pygame.draw.rect(surface, colour, self.rect)
