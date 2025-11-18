@@ -74,11 +74,11 @@ def map3o(player, box, button, end):
     return walls
 
 def map4n(player, box, button, end):
-    if button.x != 300 and button.y != 300:
+    if button.x != 300 and button.y != 290:
         print("Resetting positions for map4n")
         player.x, player.y = 200, 200
         box.x, box.y, box.state = 100, 150, 2
-        button.x, button.y, button.state = 300, 300, 2
+        button.x, button.y, button.state = 300, 290, 2
         end.x, end.y, end.active = 775, 575, False
     print("in setting walls")
     wall1 = Wall(0, 50, 800, 20)  # Horizontal wall
@@ -89,11 +89,11 @@ def map4n(player, box, button, end):
     return walls
 
 def map4o(player, box, button, end):
-    if button.x != 300 and button.y != 300:
+    if button.x != 300 and button.y != 290:
         print("Resetting positions for map4o")
         player.x, player.y = 200, 200
         box.x, box.y, box.state = 100, 150, 2
-        button.x, button.y, button.state = 300, 300, 2
+        button.x, button.y, button.state = 300, 290, 2
         end.x, end.y, end.active = 775, 575, False
     print("in setting walls")
     wall1 = Wall(0, 0, 800, 20)  # Horizontal wall
