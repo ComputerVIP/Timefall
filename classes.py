@@ -79,13 +79,13 @@ class Player(Base):
 
         # Keep player on-screen (clamp)
         if self.x < 0:
-            self.x = 0 + 32
+            self.x = 0 + 13
         if self.x > 800:
-            self.x = 800 - 32
+            self.x = 800 - 13
         if self.y < 0:
-            self.y = 0 + 32
+            self.y = 0 + 13
         if self.y > 600:
-            self.y = 600 - 32
+            self.y = 600 - 13
         
         for i in walls:
             if self.get_rect().colliderect(i.rect):
