@@ -39,7 +39,6 @@ def main():
                             break
 
                         screen, player, box, button, end, state = result
-
         screen.fill((0, 0, 0))
         screen.blit(norm_text, (200, 250))
         pygame.display.flip()

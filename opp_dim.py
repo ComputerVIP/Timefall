@@ -22,6 +22,8 @@ def main(screen, player=None, box=None, button=None, end=None):
         walls= map3o(player, box, button, end)
     elif end.level == 4:
         walls = map4o(player, box, button, end)
+    elif end.level == 5:
+        walls = map5o(player, box, button, end)
 
     try:
         doors

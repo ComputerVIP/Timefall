@@ -11,7 +11,7 @@ def main(screen, player=None, box=None, button=None, end=None):
     if button is None:
         button = Button(500, 350, 0)
     if end is None:
-        end = End(750, 550, 2, active=False, level=1)
+        end = End(750, 550, 2, active=False, level=1) #Change level to help test, otherwise leave at 1
 
     if end.level == 1:
         walls = map1n()
@@ -21,6 +21,8 @@ def main(screen, player=None, box=None, button=None, end=None):
         walls, doors = map3n(player, box, button, end)
     elif end.level == 4:
         walls = map4n(player, box, button, end)
+    elif end.level == 5:
+        walls = map5n(player, box, button, end)
 
     try:
         doors
