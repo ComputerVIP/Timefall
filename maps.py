@@ -124,3 +124,17 @@ def map5o(player, box, button, end):
     wall4 = Wall(780, 0, 20, 580)  # Vertical wall
     walls = [wall1, wall2, wall3, wall4]
     return walls
+
+def map6n(player, box, button, end):
+    if button.x != 400 and button.y != 300:
+        player.x, player.y = 100, 100
+        box.x, box.y, box.state = 200, 150, 2
+        button.x, button.y, button.state = 400, 290, 2
+        end.x, end.y, end.active = 750, 550, False
+    wall1 = Wall(0, 50, 800, 20)  # Horizontal wall
+    wall2 = Wall(0, 50, 20, 500)  # Vertical wall
+    wall4 = Wall(780, 50, 20, 500)  # Vertical wall
+    walls = [wall1, wall2, wall4]
+    door1 = Door(0, 530, 800, 20)
+    doors = [door1]
+    return walls, doors

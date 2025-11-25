@@ -46,6 +46,8 @@ def main(screen, player=None, box=None, button=None, end=None):
                 # use event.key so the switch isn't missed
                 if event.key == pygame.K_SPACE:
                     return screen, player, box, button, end, 'norm'
+                if event.key == pygame.K_ESCAPE:
+                    return screen, player, box, button, end, 'pause'
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # Left click
                     if button.get_rect().collidepoint(event.pos):

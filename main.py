@@ -1,4 +1,5 @@
 import pygame
+from pause import pause
 
 def main():
     pygame.init()
@@ -30,15 +31,27 @@ def main():
                         if state == 'opp':
                             from opp_dim import main as opp_main
                             result = opp_main(screen, player, box, button, end)
-                        else:
+                        elif state == 'norm':
                             from norm_dim import main as norm_main
                             result = norm_main(screen, player, box, button, end)
+                            print(result)
+                        elif state == 'pause':
+                            ps = pause(screen)
+                            if ps == 'menu':
+                                return main()
+                            elif ps == False:
+                                running = False
+                                break
+                            elif ps == 'norm':
+                                result = (screen, player, box, button, end, 'norm')
 
                         if not result:
                             running = False
                             break
 
                         screen, player, box, button, end, state = result
+                    
+
         screen.fill((0, 0, 0))
         screen.blit(norm_text, (200, 250))
         pygame.display.flip()
