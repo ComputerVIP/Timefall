@@ -64,7 +64,7 @@ class Player(Base):
         # Move X first and handle collision/pushing
         if dx != 0:
             self.x += dx
-            if self.get_rect().colliderect(box.get_rect()):
+            if self.get_rect().colliderect(box.get_rect()) and box.pushable:
                 # try to push box horizontally; if can't, revert player
                 if not box.move(dx, 0):
                     self.x -= dx
@@ -72,7 +72,7 @@ class Player(Base):
         # Move Y next and handle collision/pushing
         if dy != 0:
             self.y += dy
-            if self.get_rect().colliderect(box.get_rect()):
+            if self.get_rect().colliderect(box.get_rect()) and box.pushable:
                 # try to push box vertically; if can't, revert player
                 if not box.move(0, dy):
                     self.y -= dy
@@ -136,8 +136,9 @@ class Player(Base):
 
 
 class Box(Base):
-    def __init__(self, x, y, state):
+    def __init__(self, x, y, state, pushable=True):
         super().__init__(x, y, state)
+        self.pushable = pushable
         self.img = pygame.Surface((30, 30))
         self.img.fill((255, 0, 0))  # Set color once in __init__
         # Don't create separate rect
@@ -222,3 +223,22 @@ class Door:
             return
         else:
             pygame.draw.rect(surface, colour, self.rect)
+
+class Click:
+    def __init__(self, x, y, width, height):
+        self.rect = pygame.Rect(x, y, width, height)
+    def is_clicked(self, mouse_pos):
+        return self.rect.collidepoint(mouse_pos)
+    
+    def draw(self, surface, colour):
+        pygame.draw.rect(surface, colour, self.rect)
+
+class Img:
+    def __init__(self, x, y, img_path):
+        self.x = x
+        self.y = y
+        self.img = pygame.image.load(img_path)
+
+    def draw(self, surface):
+        rect = self.img.get_rect(center=(self.x, self.y))
+        surface.blit(self.img, rect)

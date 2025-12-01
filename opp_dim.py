@@ -15,15 +15,17 @@ def main(screen, player=None, box=None, button=None, end=None):
         end = End(750, 550, 1, active=False, level = 1)
     
     if end.level == 1:
-        walls = map1o()
+        walls, imgs = map1o()
     elif end.level == 2:
-        walls = map2o(player, box, button, end)
+        walls, imgs = map2o(player, box, button, end)
     elif end.level == 3:
-        walls= map3o(player, box, button, end)
+        walls, imgs = map3o(player, box, button, end)
     elif end.level == 4:
-        walls = map4o(player, box, button, end)
+        walls, imgs = map4o(player, box, button, end)
     elif end.level == 5:
-        walls = map5o(player, box, button, end)
+        walls, imgs = map5o(player, box, button, end)
+    elif end.level == 6:
+        walls, doors, imgs = map6o(player, box, button, end)
 
     try:
         doors
@@ -51,12 +53,25 @@ def main(screen, player=None, box=None, button=None, end=None):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # Left click
                     if button.get_rect().collidepoint(event.pos):
-                        button.state = 0 if button.state == 1 else 1
+                        if button.state == 0:
+                            button.state = 1
+                        elif button.state == 1:
+                            button.state = 0
+                        else:
+                            button.state = 2
                     if box.get_rect().collidepoint(event.pos):
-                        box.state = 0 if box.state == 1 else 1
+                        if box.state == 1:
+                            box.state = 0
+                        elif box.state == 0:
+                            box.state = 1
+                        else:
+                            box.state = 2
 
         keys = pygame.key.get_pressed()
-        player.move(box, keys, walls, doors)
+        try:
+            player.move(box, keys, walls, doors)
+        except:
+            return screen, player, box, button, end, 'menu'
         screen.fill((44, 4, 28))
 
         if player.state in (1, 2):
@@ -78,6 +93,8 @@ def main(screen, player=None, box=None, button=None, end=None):
                 i.draw(screen, (150, 75, 0))
             else:
                 i.draw(screen, None)
+        for i in imgs:
+            i.draw(screen)
 
         level = end.level
         
