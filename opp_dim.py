@@ -15,17 +15,22 @@ def main(screen, player=None, box=None, button=None, end=None):
     if end is None:
         end = End(750, 550, 1, active=False, level = 1)
     
-    map_functions = {
-        1: wrap_map(map1o, needs_args=False),
-        2: wrap_map(map2o, needs_args=True),
-        3: wrap_map(map3o, needs_args=True),
-        4: wrap_map(map4o, needs_args=True),
-        5: wrap_map(map5o, needs_args=True),
-        6: wrap_map(map6o, needs_args=True),
-        7: wrap_map(map7o, needs_args=True),
-        8: wrap_map(map8o, needs_args=True),
-    }
-    walls, doors, imgs = map_functions[end.level](player, box, button, end)
+    if end.level == 1:
+        walls,imgs = map1o(player, box, button, end)
+    elif end.level == 2:
+        walls,imgs = map2o(player, box, button, end)
+    elif end.level == 3:
+        walls, imgs = map3o(player, box, button, end)
+    elif end.level == 4:
+        walls,imgs = map4o(player, box, button, end)
+    elif end.level == 5:
+        walls,imgs = map5o(player, box, button, end)
+    elif end.level == 6:
+        walls,imgs = map6o(player, box, button, end)
+    elif end.level == 7:
+        walls,doors, imgs = map7o(player, box, button, end)
+    elif end.level == 8:
+        walls,imgs = map8o(player, box, button, end)
 
     try:
         doors
@@ -50,6 +55,23 @@ def main(screen, player=None, box=None, button=None, end=None):
                     return screen, player, box, button, end, 'norm'
                 if event.key == pygame.K_ESCAPE:
                     return screen, player, box, button, end, 'pause'
+                if event.key == pygame.K_r:
+                    if end.level == 1:
+                        walls,imgs = map1o(player, box, button, end)
+                    elif end.level == 2:
+                        walls,imgs = map2o(player, box, button, end)
+                    elif end.level == 3:
+                        walls, imgs = map3o(player, box, button, end)
+                    elif end.level == 4:
+                        walls,imgs = map4o(player, box, button, end)
+                    elif end.level == 5:
+                        walls,imgs = map5o(player, box, button, end)
+                    elif end.level == 6:
+                        walls,imgs = map6o(player, box, button, end)
+                    elif end.level == 7:
+                        walls,doors, imgs = map7o(player, box, button, end)
+                    elif end.level == 8:
+                        walls, imgs = map8o(player, box, button, end)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # Left click
                     if button.get_rect().collidepoint(event.pos):
