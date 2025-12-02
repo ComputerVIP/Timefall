@@ -31,7 +31,7 @@ def main():
                         from norm_dim import main as norm_main
                         # start the norm mode; it will create objects if None
                         result = norm_main(screen, None, None, None, None)
-                        if not result:
+                        if not result: 
                             running = False
                             break
                         screen, player, box, button, end, next_state = result
