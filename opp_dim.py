@@ -1,7 +1,6 @@
 import pygame
 from classes import Player, Box, Button, End
 from maps import *
-from utils import wrap_map
 
 def main(screen, player=None, box=None, button=None, end=None):
     
