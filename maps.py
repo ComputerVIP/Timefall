@@ -19,11 +19,11 @@ def map1o():
     return walls, []
 
 def map2n(player, box, button, end):
-    if player.x != 400 and end.active == True and box.x != 200:
+    if not end.initialized:
         player.x, player.y = 400, 300
         box.x, box.y, box.state = 200, 150, 2
         button.x, button.y = 600, 450
-        end.x, end.y, end.active = 750, 550, False
+        end.x, end.y, end.active, end.initialized = 750, 550, False, True
 
     wall1 = Wall(0, 0, 800, 20)  # Horizontal wall
     wall2 = Wall(0, 0, 20, 600)  # Vertical wall
@@ -34,11 +34,11 @@ def map2n(player, box, button, end):
     return walls, []
 
 def map2o(player, box, button, end):
-    if player.x != 400 and end.active == True and box.x != 200:
+    if not end.initialized:
         player.x, player.y = 400, 300
         box.x, box.y, box.state = 200, 150, 2
         button.x, button.y = 600, 450
-        end.x, end.y, end.active = 750, 550, False
+        end.x, end.y, end.active, end.initialized = 750, 550, False, True
     wall1 = Wall(0, 0, 800, 20)  # Horizontal wall
     wall2 = Wall(0, 0, 20, 600)  # Vertical wall
     wall3 = Wall(0, 580, 800, 20)  # Horizontal wall
@@ -47,11 +47,11 @@ def map2o(player, box, button, end):
     return walls, []
 
 def map3n(player, box, button, end):
-    if player.x != 100 and end.active == True and box.x != 200:
+    if not end.initialized:
         player.x, player.y = 100, 100
         box.x, box.y, box.state = 200, 150, 2
         button.x, button.y, button.state = 400, 290, 2
-        end.x, end.y, end.active = 750, 550, False
+        end.x, end.y, end.active, end.initialized = 750, 550, False, True
     wall1 = Wall(0, 50, 800, 20)  # Horizontal wall
     wall2 = Wall(0, 50, 20, 500)  # Vertical wall
     wall4 = Wall(780, 50, 20, 500)  # Vertical wall
@@ -61,11 +61,11 @@ def map3n(player, box, button, end):
     return walls, doors, []
 
 def map3o(player, box, button, end):
-    if player.x != 100 and end.active == True and box.x != 200:
+    if not end.initialized:
         player.x, player.y = 100, 100
         box.x, box.y, box.state = 200, 150, 2
         button.x, button.y, button.state = 400, 290, 2
-        end.x, end.y, end.active = 750, 550, False
+        end.x, end.y, end.active, end.initialized = 750, 550, False, True
     wall1 = Wall(0, 0, 800, 20)  # Horizontal wall
     wall2 = Wall(0, 50, 20, 550)  # Vertical wall
     wall3 = Wall(0, 530, 800, 20)  # Horizontal wall
@@ -75,11 +75,11 @@ def map3o(player, box, button, end):
 
 
 def map4n(player, box, button, end):
-    if player.x != 200 and end.active == True and box.x != 100:
+    if not end.initialized:
         player.x, player.y = 200, 200
         box.x, box.y, box.state = 100, 150, 2
         button.x, button.y, button.state = 300, 300, 2
-        end.x, end.y, end.active = 775, 585, False
+        end.x, end.y, end.active, end.initialized = 775, 585, False, True
     wall1 = Wall(0, 0, 800, 20)  # Horizontal wall
     wall2 = Wall(0, 0, 20, 540)  # Vertical wall
     wall3 = Wall(0, 520, 800, 20)  # Horizontal wall
@@ -88,11 +88,11 @@ def map4n(player, box, button, end):
     return walls, []
 
 def map4o(player, box, button, end):
-    if player.x != 200 and end.active == True and box.x != 100:
+    if not end.initialized:
         player.x, player.y = 200, 200
         box.x, box.y, box.state = 100, 150, 2
         button.x, button.y, button.state = 300, 300, 2
-        end.x, end.y, end.active = 775, 585, False
+        end.x, end.y, end.active, end.initialized = 775, 585, False, True
     wall1 = Wall(0, 0, 800, 20)  # Horizontal wall
     wall2 = Wall(0, 0, 20, 550)  # Vertical wall
     wall3 = Wall(0, 490, 800, 20)  # Horizontal wall
@@ -102,11 +102,11 @@ def map4o(player, box, button, end):
     return walls, []
 
 def map5n(player, box, button, end):
-    if player.x != 200 and end.active == True and box.x != 100:
+    if not end.initialized:
         player.x, player.y = 200, 200
         box.x, box.y, box.state = 100, 150, 2
         button.x, button.y, button.state = 290, 290, 2
-        end.x, end.y, end.active = 100, 50, False
+        end.x, end.y, end.active, end.initialized = 100, 50, False, True
     wall1 = Wall(0, 0, 800, 20)  # Horizontal wall
     wall2 = Wall(0, 0, 20, 600)  # Vertical wall
     wall3 = Wall(0, 580, 800, 20)  # Horizontal wall
@@ -121,11 +121,11 @@ def map5n(player, box, button, end):
     return walls, []
 
 def map5o(player, box, button, end):
-    if player.x != 200 and end.active == True and box.x != 100:
+    if not end.initialized:
         player.x, player.y = 200, 200
         box.x, box.y, box.state = 100, 150, 2
         button.x, button.y, button.state = 290, 290, 2
-        end.x, end.y, end.active = 100, 50, False
+        end.x, end.y, end.active, end.initialized = 100, 50, False, True
     wall1 = Wall(0, 0, 800, 20)  # Horizontal wall
     wall2 = Wall(0, 0, 20, 600)  # Vertical wall
     wall3 = Wall(0, 580, 800, 20)  # Horizontal wall
@@ -140,11 +140,11 @@ def map5o(player, box, button, end):
     return walls, []
 
 def map6n(player, box, button, end):
-    if player.x != 200 and end.active == True and box.x != 100:
+    if not end.initialized:
         player.x, player.y = 200, 200
         box.x, box.y, box.state = 100, 150, 2
         button.x, button.y, button.state = 300, 300, 2
-        end.x, end.y, end.active = 775, 575, False
+        end.x, end.y, end.active, end.initialized = 775, 575, False, True
     wall1 = Wall(0, 50, 800, 20)  # Horizontal wall
     wall2 = Wall(0, 50, 20, 500)  # Vertical wall
     wall3 = Wall(0, 530, 800, 20)  # Horizontal wall
@@ -153,11 +153,11 @@ def map6n(player, box, button, end):
     return walls, []
 
 def map6o(player, box, button, end):
-    if player.x != 200 and end.active == True and box.x != 100:
+    if not end.initialized:
         player.x, player.y = 200, 200
         box.x, box.y, box.state = 100, 150, 2
         button.x, button.y, button.state = 300, 300, 2
-        end.x, end.y, end.active = 775, 575, False
+        end.x, end.y, end.active, end.initialized = 775, 575, False, True
     wall1 = Wall(0, 0, 800, 20)  # Horizontal wall
     wall2 = Wall(0, 0, 20, 550)  # Vertical wall
     wall3 = Wall(0, 530, 780, 20)  # Horizontal wall
@@ -166,33 +166,33 @@ def map6o(player, box, button, end):
     return walls, []
 
 def map7n(player, box, button, end):
-    if player.x != 100 and end.active == True and box.x != 400:
+    if not end.initialized:
         player.x, player.y = 100, 100
         box.x, box.y, box.state = 400, 500, 1
         button.x, button.y, button.state = 400, 500, 0
-        end.x, end.y, end.active = 750, 550, False
+        end.x, end.y, end.active, end.initialized = 750, 550, False, True
     door = Door(0, 400, 800, 20)
     walls = []
     doors = [door]
     return walls, doors, []
 
 def map7o(player, box, button, end):
-    if player.x != 100 and end.active == True and box.x != 400:
+    if not end.initialized:
         player.x, player.y = 100, 100
         box.x, box.y, box.state = 400, 500, 1
         button.x, button.y, button.state = 400, 500, 0
-        end.x, end.y, end.active = 750, 550, False
+        end.x, end.y, end.active, end.initialized = 750, 550, False, True
     door = Door(0, 400, 800, 20)
     walls = []
     doors = [door]
     return walls, doors, []
 
 def map8n(player, box, button, end):
-    if player.x != 200 and end.active == True and box.x != 100:
+    if not end.initialized:
         player.x, player.y = 200, 200
         box.x, box.y, box.state = 100, 150, 2
         button.x, button.y, button.state = 300, 300, 2
-        end.x, end.y, end.active = 775, 575, False
+        end.x, end.y, end.active, end.initialized = 775, 575, False, True
     wall1 = Wall(0, 0, 800, 20)  # Horizontal wall
     wall2 = Wall(0, 0, 20, 550)  # Vertical wall
     wall3 = Wall(0, 530, 800, 20)  # Horizontal wall
@@ -201,11 +201,11 @@ def map8n(player, box, button, end):
     return walls, []
 
 def map8o(player, box, button, end):
-    if player.x != 200 and end.active == True and box.x != 100:
+    if not end.initialized:
         player.x, player.y = 200, 200
         box.x, box.y, box.state = 100, 150, 2
         button.x, button.y, button.state = 300, 300, 2
-        end.x, end.y, end.active = 775, 575, False
+        end.x, end.y, end.active, end.initialized = 775, 575, False, True
     wall1 = Wall(0, 0, 800, 20)  # Horizontal wall
     wall2 = Wall(0, 0, 20, 520)  # Vertical wall
     wall3 = Wall(0, 500, 800, 20)  # Horizontal wall

@@ -3,6 +3,7 @@ from classes import Player, Box, Button, End
 from maps import *
 
 def main(screen, player=None, box=None, button=None, end=None):
+
     # create objects if not provided
     if player is None:
         player = Player(400, 300, 2)
@@ -14,7 +15,7 @@ def main(screen, player=None, box=None, button=None, end=None):
         end = End(750, 550, 2, active=False, level=5) #Change level to help test, otherwise leave at 1
 
     if end.level == 1:
-        walls,imgs = map1n(player, box, button, end)
+        walls,imgs = map1n()
     elif end.level == 2:
         walls,imgs = map2n(player, box, button, end)
     elif end.level == 3:
@@ -29,8 +30,6 @@ def main(screen, player=None, box=None, button=None, end=None):
         walls,doors, imgs = map7n(player, box, button, end)
     elif end.level == 8:
         walls,imgs = map8n(player, box, button, end)
-
-
 
     try:
         doors
@@ -51,8 +50,9 @@ def main(screen, player=None, box=None, button=None, end=None):
                 if event.key == pygame.K_ESCAPE:
                     return screen, player, box, button, end, 'pause'
                 if event.key == pygame.K_r:
+                    end.initialized = False
                     if end.level == 1:
-                        walls,imgs = map1n(player, box, button, end)
+                        walls,imgs = map1n()
                     elif end.level == 2:
                         walls,imgs = map2n(player, box, button, end)
                     elif end.level == 3:
@@ -88,30 +88,34 @@ def main(screen, player=None, box=None, button=None, end=None):
         try:
             player.move(box, keys, walls, doors)
         except Exception as e:
-            print(e)
             return screen, player, box, button, end, 'menu'
         screen.fill((234, 248, 240))
-        
 
         if player.state in (0, 2):
             player.draw(screen, (38, 215, 197))
+
         if box.state in (0, 2):
             box.draw(screen, (102, 82, 62))
+
         if end.state in (0, 2):
             if end.active == True:
                 end.img.fill((0, 200, 0))
             else:
                 end.img.fill((100, 255, 100))
             end.draw(screen)
+
         if button.state in (0, 2):
             button.draw(screen, (143, 63, 122))
+
         for i in walls:
             i.draw(screen, (60, 142, 227))
+
         for i in doors:
             if i.active == True:
                 i.draw(screen, (150, 75, 0))
             else:
                 i.draw(screen, None)
+
         for i in imgs:
             i.draw(screen)
 

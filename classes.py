@@ -173,10 +173,11 @@ class Box(Base):
     
     
 class End(Base):
-    def __init__(self, x, y, state, active = False, level = 3, gif_path=None):
+    def __init__(self, x, y, state, active = False, level = 1, initialized=False):
         super().__init__(x, y, state)
         self.active = active
         self.level = level
+        self.initialized = initialized
         self.img = pygame.Surface((30, 30))
         self.img.fill((0, 255, 0))
 
@@ -184,6 +185,7 @@ class End(Base):
         # Only trigger if colliding, active and the states match (or this end is 'both' state==2)
         if self.get_rect().colliderect(player.get_rect()) and self.active and (self.state == player.state or self.state == 2):
             self.level += 1
+            self.initialized = False  # Reset for next level
 
 
 class Button(Base):

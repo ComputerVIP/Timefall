@@ -15,7 +15,7 @@ def main(screen, player=None, box=None, button=None, end=None):
         end = End(750, 550, 1, active=False, level = 1)
     
     if end.level == 1:
-        walls,imgs = map1o(player, box, button, end)
+        walls,imgs = map1o()
     elif end.level == 2:
         walls,imgs = map2o(player, box, button, end)
     elif end.level == 3:
@@ -36,13 +36,8 @@ def main(screen, player=None, box=None, button=None, end=None):
     except NameError:
         doors = []
 
-    # ensure only the player's state switches to this mode
-    #player.state = 1
-
     clock = pygame.time.Clock()
     running = True
-
-    # removed overwriting player.original_img
 
     while running:
         for event in pygame.event.get():
@@ -55,8 +50,9 @@ def main(screen, player=None, box=None, button=None, end=None):
                 if event.key == pygame.K_ESCAPE:
                     return screen, player, box, button, end, 'pause'
                 if event.key == pygame.K_r:
+                    end.initialized = False
                     if end.level == 1:
-                        walls,imgs = map1o(player, box, button, end)
+                        walls,imgs = map1o()
                     elif end.level == 2:
                         walls,imgs = map2o(player, box, button, end)
                     elif end.level == 3:
@@ -97,23 +93,29 @@ def main(screen, player=None, box=None, button=None, end=None):
 
         if player.state in (1, 2):
             player.draw(screen, (215, 38, 56))
+
         if box.state in (1, 2):
             box.draw(screen, (62, 74, 102))
+
         if end.state in (1, 2):
             if end.active == True:
                 end.img.fill((0, 200, 0))
             else:
                 end.img.fill((100, 255, 100))
             end.draw(screen)
+
         if button.state in (1, 2):
             button.draw(screen, (106, 143, 63))
+
         for i in walls:
             i.draw(screen, (227, 178, 60))
+
         for i in doors:
             if i.active == True:
                 i.draw(screen, (150, 75, 0))
             else:
                 i.draw(screen, None)
+
         for i in imgs:
             i.draw(screen)
 
@@ -126,7 +128,6 @@ def main(screen, player=None, box=None, button=None, end=None):
             player.x = 400
             player.y = 300
             return screen, player, box, button, end, 'opp'
-            
         
         pygame.display.flip()
         clock.tick(60)
