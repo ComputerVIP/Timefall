@@ -27,10 +27,10 @@ class Player(Base):
         self.speed = 5
 
         # Load original only once
-        self.original_img = pygame.image.load('Resources\\ply_test.png')
+        self.original_img = pygame.image.load('Resources\\norm_imgs\\norm.png')
         self.img = self.original_img  # Set the img for Base class
 
-    def draw(self, surface, colour):
+    def draw(self, surface):
         # Mouse angle
         mx, my = pygame.mouse.get_pos()
         rect = self.get_rect()  # Get current positioned rect
@@ -40,8 +40,7 @@ class Player(Base):
         angle = degrees(atan2(-dy, dx))
 
         # Rotate from ORIGINAL only
-        self.original_img.fill(colour)
-        self.img = pygame.transform.rotate(self.original_img, angle)
+        self.img = pygame.transform.rotate(self.img, angle-90)
 
         # Get new rect for rotated image
         new_rect = self.img.get_rect(center=(self.x, self.y))
@@ -49,7 +48,13 @@ class Player(Base):
         # Draw
         surface.blit(self.img, new_rect)
 
-    def move(self, box, keys, walls, doors):
+    def move(self, box, keys, walls, doors, dim='norm'):
+
+        if self.get_rect().colliderect(box.get_rect()):
+            self.img = pygame.image.load('Resources\\norm_imgs\\box_up_norm.png') if dim=='norm' else pygame.image.load('Resources\\opp_imgs\\box_up_opp.png')
+        else:
+            self.img = pygame.image.load('Resources\\norm_imgs\\norm.png') if dim=='norm' else pygame.image.load('Resources\\opp_imgs\\opp.png')
+
         # Compute desired move
         dx, dy = 0, 0
         if keys[pygame.K_w]:
@@ -76,6 +81,7 @@ class Player(Base):
                 # try to push box vertically; if can't, revert player
                 if not box.move(0, dy):
                     self.y -= dy
+        
 
         # Keep player on-screen (clamp)
         if self.x < 0:
@@ -143,9 +149,9 @@ class Box(Base):
         self.img.fill((255, 0, 0))  # Set color once in __init__
         # Don't create separate rect
 
-    def draw(self, surface, colour):
+    def draw(self, surface, dim='norm'):
         rect = self.get_rect()  # This now returns properly positioned rect
-        self.img.fill(colour)
+        self.img = pygame.image.load('Resources\\norm_imgs\\box_norm.png') if dim=='norm' else pygame.image.load('Resources\\opp_imgs\\box_opp.png')
         surface.blit(self.img, rect)
 
     def move(self, dx, dy):

@@ -12,7 +12,7 @@ def main(screen, player=None, box=None, button=None, end=None):
     if button is None:
         button = Button(500, 350, 0)
     if end is None:
-        end = End(750, 550, 2, active=False, level=5) #Change level to help test, otherwise leave at 1
+        end = End(750, 550, 2, active=False, level=1) #Change level to help test, otherwise leave at 1
 
     if end.level == 1:
         walls,imgs = map1n()
@@ -86,16 +86,16 @@ def main(screen, player=None, box=None, button=None, end=None):
 
         keys = pygame.key.get_pressed()
         try:
-            player.move(box, keys, walls, doors)
+            player.move(box, keys, walls, doors, 'norm')
         except Exception as e:
             return screen, player, box, button, end, 'menu'
         screen.fill((234, 248, 240))
 
         if player.state in (0, 2):
-            player.draw(screen, (38, 215, 197))
+            player.draw(screen)
 
         if box.state in (0, 2):
-            box.draw(screen, (102, 82, 62))
+            box.draw(screen, 'norm')
 
         if end.state in (0, 2):
             if end.active == True:

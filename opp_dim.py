@@ -86,16 +86,16 @@ def main(screen, player=None, box=None, button=None, end=None):
 
         keys = pygame.key.get_pressed()
         try:
-            player.move(box, keys, walls, doors)
+            player.move(box, keys, walls, doors, 'opp')
         except:
             return screen, player, box, button, end, 'menu'
         screen.fill((44, 4, 28))
 
         if player.state in (1, 2):
-            player.draw(screen, (215, 38, 56))
+            player.draw(screen)
 
         if box.state in (1, 2):
-            box.draw(screen, (62, 74, 102))
+            box.draw(screen, 'opp')
 
         if end.state in (1, 2):
             if end.active == True:

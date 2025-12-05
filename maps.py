@@ -104,7 +104,7 @@ def map4o(player, box, button, end):
 def map5n(player, box, button, end):
     if not end.initialized:
         player.x, player.y = 200, 200
-        box.x, box.y, box.state = 100, 150, 2
+        box.x, box.y, box.state = 100, 350, 2
         button.x, button.y, button.state = 290, 290, 2
         end.x, end.y, end.active, end.initialized = 100, 50, False, True
     wall1 = Wall(0, 0, 800, 20)  # Horizontal wall
@@ -123,7 +123,7 @@ def map5n(player, box, button, end):
 def map5o(player, box, button, end):
     if not end.initialized:
         player.x, player.y = 200, 200
-        box.x, box.y, box.state = 100, 150, 2
+        box.x, box.y, box.state = 100, 350, 2
         button.x, button.y, button.state = 290, 290, 2
         end.x, end.y, end.active, end.initialized = 100, 50, False, True
     wall1 = Wall(0, 0, 800, 20)  # Horizontal wall
