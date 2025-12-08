@@ -37,9 +37,16 @@ def main(screen, player=None, box=None, button=None, end=None):
         doors = []
 
     clock = pygame.time.Clock()
+    last_update = 0
+    frame_delay = 33
     running = True
+    can_do = 0
 
     while running:
+        now = pygame.time.get_ticks()
+        if now - last_update >= frame_delay:
+            can_do += 1
+            last_update = now
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return None
@@ -90,6 +97,7 @@ def main(screen, player=None, box=None, button=None, end=None):
         except Exception as e:
             return screen, player, box, button, end, 'menu'
         screen.fill((234, 248, 240))
+        
 
         if player.state in (0, 2):
             player.draw(screen)
@@ -97,15 +105,12 @@ def main(screen, player=None, box=None, button=None, end=None):
         if box.state in (0, 2):
             box.draw(screen, 'norm')
 
-        if end.state in (0, 2):
-            if end.active == True:
-                end.img.fill((0, 200, 0))
-            else:
-                end.img.fill((100, 255, 100))
-            end.draw(screen)
-
         if button.state in (0, 2):
             button.draw(screen, (143, 63, 122))
+        
+        if can_do > 0:
+            end.draw(screen)
+            can_do = 0
 
         for i in walls:
             i.draw(screen, (60, 142, 227))

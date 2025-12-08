@@ -179,11 +179,12 @@ class Box(Base):
     
     
 class End(Base):
-    def __init__(self, x, y, state, active = False, level = 1, initialized=False):
+    def __init__(self, x, y, state, active = False, level = 1, initialized=False, frame=0):
         super().__init__(x, y, state)
         self.active = active
         self.level = level
         self.initialized = initialized
+        self.frame = frame
         self.img = pygame.Surface((30, 30))
         self.img.fill((0, 255, 0))
 
@@ -192,6 +193,26 @@ class End(Base):
         if self.get_rect().colliderect(player.get_rect()) and self.active and (self.state == player.state or self.state == 2):
             self.level += 1
             self.initialized = False  # Reset for next level
+    
+    def draw(self, surface, img_path=None):
+        if self.active == True:
+            self.img = pygame.image.load('Resources\\norm_imgs\\end_active.png')
+        else:
+            if self.frame == 0:
+                self.img = pygame.image.load('Resources\\goal_imgs\\end_inactive_1.png')
+                self.frame = 1
+            elif self.frame == 1:
+                self.img = pygame.image.load('Resources\\goal_imgs\\end_inactive_2.png')
+                self.frame = 2
+            elif self.frame == 2:
+                self.img = pygame.image.load('Resources\\goal_imgs\\end_inactive_3.png')
+                self.frame = 3
+            elif self.frame == 3:
+                self.img = pygame.image.load('Resources\\goal_imgs\\end_inactive_4.png')
+                self.frame = 0
+        if self.img:
+            rect = self.get_rect()
+            surface.blit(self.img, rect)
 
 
 class Button(Base):
