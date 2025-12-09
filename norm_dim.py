@@ -76,6 +76,14 @@ def main(screen, player=None, box=None, button=None, end=None):
                         walls,imgs = map8n(player, box, button, end)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # Left click
+                    if button.get_rect().collidepoint(event.pos) and box.get_rect().collidepoint(event.pos):
+                        # prioritize button if both clicked
+                        if button.state == 0:
+                            button.state = 1
+                        elif button.state == 1:
+                            button.state = 0
+                        else:
+                            button.state = 2
                     if button.get_rect().collidepoint(event.pos):
                         if button.state == 0:
                             button.state = 1
@@ -102,15 +110,17 @@ def main(screen, player=None, box=None, button=None, end=None):
         if player.state in (0, 2):
             player.draw(screen)
 
+        if button.state in (0, 2):
+            button.draw(screen, 'norm')
+
         if box.state in (0, 2):
             box.draw(screen, 'norm')
-
-        if button.state in (0, 2):
-            button.draw(screen, (143, 63, 122))
         
-        if can_do > 0:
-            end.draw(screen)
+        if can_do > 1:
+            end.draw(screen, True)
             can_do = 0
+        else:
+            end.draw(screen, False)
 
         for i in walls:
             i.draw(screen, (60, 142, 227))
@@ -132,6 +142,7 @@ def main(screen, player=None, box=None, button=None, end=None):
         if end.level == (level + 1):
             player.x = 400
             player.y = 300
+            button.active = False
             return screen, player, box, button, end, 'norm'
 
         pygame.display.flip()

@@ -194,36 +194,74 @@ class End(Base):
             self.level += 1
             self.initialized = False  # Reset for next level
     
-    def draw(self, surface, img_path=None):
-        if self.active == True:
-            self.img = pygame.image.load('Resources\\norm_imgs\\end_active.png')
+    def draw(self, surface, change_frame=True):
+        if change_frame:
+            if self.active == True:
+                if self.frame == 0:
+                    self.img = pygame.image.load('Resources\\goal_imgs\\goal_active_1.png')
+                    self.frame = 1
+                elif self.frame == 1:
+                    self.img = pygame.image.load('Resources\\goal_imgs\\goal_active_2.png')
+                    self.frame = 2
+                elif self.frame == 2:
+                    self.img = pygame.image.load('Resources\\goal_imgs\\goal_active_3.png')
+                    self.frame = 3
+                elif self.frame == 3:
+                    self.img = pygame.image.load('Resources\\goal_imgs\\goal_active_4.png')
+                    self.frame = 0
+            else:
+                if self.frame == 0:
+                    self.img = pygame.image.load('Resources\\goal_imgs\\goal_inactive_1.png')
+                    self.frame = 1
+                elif self.frame == 1:
+                    self.img = pygame.image.load('Resources\\goal_imgs\\goal_inactive_2.png')
+                    self.frame = 2
+                elif self.frame == 2:
+                    self.img = pygame.image.load('Resources\\goal_imgs\\goal_inactive_3.png')
+                    self.frame = 3
+                elif self.frame == 3:
+                    self.img = pygame.image.load('Resources\\goal_imgs\\goal_inactive_4.png')
+                    self.frame = 0
         else:
-            if self.frame == 0:
-                self.img = pygame.image.load('Resources\\goal_imgs\\end_inactive_1.png')
-                self.frame = 1
-            elif self.frame == 1:
-                self.img = pygame.image.load('Resources\\goal_imgs\\end_inactive_2.png')
-                self.frame = 2
-            elif self.frame == 2:
-                self.img = pygame.image.load('Resources\\goal_imgs\\end_inactive_3.png')
-                self.frame = 3
-            elif self.frame == 3:
-                self.img = pygame.image.load('Resources\\goal_imgs\\end_inactive_4.png')
-                self.frame = 0
+            if self.active == True:
+                if self.frame == 0:
+                    self.img = pygame.image.load('Resources\\goal_imgs\\goal_active_1.png')
+                elif self.frame == 1:
+                    self.img = pygame.image.load('Resources\\goal_imgs\\goal_active_2.png')
+                elif self.frame == 2:
+                    self.img = pygame.image.load('Resources\\goal_imgs\\goal_active_3.png')
+                elif self.frame == 3:
+                    self.img = pygame.image.load('Resources\\goal_imgs\\goal_active_4.png')
+            else:
+                if self.frame == 0:
+                    self.img = pygame.image.load('Resources\\goal_imgs\\goal_inactive_1.png')
+                elif self.frame == 1:
+                    self.img = pygame.image.load('Resources\\goal_imgs\\goal_inactive_2.png')
+                elif self.frame == 2:
+                    self.img = pygame.image.load('Resources\\goal_imgs\\goal_inactive_3.png')
+                elif self.frame == 3:
+                    self.img = pygame.image.load('Resources\\goal_imgs\\goal_inactive_4.png')
         if self.img:
             rect = self.get_rect()
             surface.blit(self.img, rect)
 
 
 class Button(Base):
-    def __init__(self, x, y, state):
+    def __init__(self, x, y, state, active=False):
         super().__init__(x, y, state)
         self.img = pygame.Surface((20, 10))
-        self.img.fill((0, 0, 255))  # Set color once in __init__
+        self.active = active
 
-    def draw(self, surface, colour):
+    def draw(self, surface, dim):
         rect = self.get_rect()  # This now returns properly positioned rect
-        self.img.fill(colour)
+        if dim == 'norm' and not self.active:
+            self.img = pygame.image.load('Resources\\button\\button_norm_up.png')
+        elif dim == 'norm' and self.active:
+            self.img = pygame.image.load('Resources\\button\\button_norm_down.png')
+        elif dim == 'opp' and not self.active:
+            self.img = pygame.image.load('Resources\\button\\button_opp_up.png')
+        elif dim == 'opp' and self.active:
+            self.img = pygame.image.load('Resources\\button\\button_opp_down.png')
         surface.blit(self.img, rect)
 
     def activate(self, box, end, doors):
@@ -233,6 +271,7 @@ class Button(Base):
                 for i in doors:
                     i.alpha=255
                     i.active = False
+            self.active = True
 
 
 class Wall:
