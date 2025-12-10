@@ -12,7 +12,7 @@ def main(screen, player=None, box=None, button=None, end=None):
     if button is None:
         button = Button(500, 350, 0)
     if end is None:
-        end = End(750, 550, 2, active=False, level=1) #Change level to help test, otherwise leave at 1
+        end = End(650, 450, 2, active=False, level=1) #Change level to help test, otherwise leave at 1
 
     if end.level == 1:
         walls,imgs = map1n()

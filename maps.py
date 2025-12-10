@@ -8,7 +8,8 @@ def map1n():
     wall3 = Wall(0, 580, 800, 20)  # Horizontal wall
     wall4 = Wall(780, 0, 20, 600)  # Vertical wall
     walls = [wall1, wall2, wall3, wall4]
-    return walls, []
+    img1 = Img(675, 425, 'Resources\\misc\\flag_txt.png')
+    return walls, [img1]
 
 def map1o():
     wall1 = Wall(0, 0, 800, 20)  # Horizontal wall
@@ -113,9 +114,9 @@ def map5n(player, box, button, end):
     wall4 = Wall(780, 0, 20, 600)  # Vertical wall
 
     wall5 = Wall(0, 100, 360, 20)  # Horizontal wall
-    wall6 = Wall(440, 100, 360, 20)
+    wall6 = Wall(470, 100, 350, 20)
 
-    wall7 = Wall(360, 80, 80, 100)
+    wall7 = Wall(360, 80, 100, 120)
 
     walls = [wall1, wall2, wall3, wall4, wall5, wall6, wall7]
     return walls, []
@@ -134,7 +135,7 @@ def map5o(player, box, button, end):
     wall5 = Wall(0, 100, 360, 20)  # Horizontal wall
     wall6 = Wall(440, 100, 360, 20)
 
-    wall7 = Wall(360, 80, 100, 60)
+    wall7 = Wall(360, 80, 70, 120)
 
     walls = [wall1, wall2, wall3, wall4, wall5, wall6, wall7]
     return walls, []
