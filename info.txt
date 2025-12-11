@@ -20,10 +20,16 @@ Projects to complete by 15-11:
 
 
 Projects to complete by 5-12:
-    Menu stuff
-    Add levels up to 8 (Making 6, 7, 8)
-    Decide to do secret or not
-    New level concepts, something buggy
+    Menu stuff --- INCOMPLETE
+    Add levels up to 8 (Making 6, 7, 8) --- Done
+    Decide to do secret or not --- Done
+    New level concepts, something buggy --- INCOMPLETE
+
+Projects to complete by 13-12:
+    Art and animation
+    Deciding what to do with the secret
+    New levels, testing
+
 
 
 
@@ -31,7 +37,11 @@ Projects to complete by 5-12:
 
 Known intended glitches:
     You can clip through objects, as long as you're slightly inside and move with them, you will not get pushed out
-    Tilting cube inside the box pushes it into you
+    Enemy in the secret room can push you into the wall
+
+Patched bugs:
+    You cannot tilt and move the box
+    You cannot just clip through walls
 
 Known unintended glitches:
-    None as of 1-12
+    None as of 10-12

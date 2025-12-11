@@ -1,7 +1,9 @@
 import pygame
 from pause import pause
 from classes import Click
-#test
+from secret_norm import sec_main_norm
+from secret_opp import sec_main_opp
+
 def main():
     pygame.init()
     screen = pygame.display.set_mode((800, 600))
@@ -14,6 +16,8 @@ def main():
     play = Click(200, 250, 400, 50)
     exit = Click(350, 350, 100, 50)
 
+    cnt = 0
+
     running = True
     while running:
         for event in pygame.event.get():
@@ -21,7 +25,40 @@ def main():
                 running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    pass
+                    cnt += 1
+                    if cnt == 3:
+                        result = sec_main_norm(screen, None, None, None)
+                        if not result: 
+                            running = False
+                            break
+                        screen, player, enemy, end, next_state = result
+
+                        state = next_state
+                        # loop between modes until quit
+                        while True:
+                            if state == 'opp':
+                                from opp_dim import main as opp_main
+                                result = sec_main_opp(screen, player, enemy, end)
+                            elif state == 'norm':
+                                from norm_dim import main as norm_main
+                                result = sec_main_norm(screen, player, enemy, end)
+                            elif state == 'pause':
+                                ps = pause(screen)
+                                if ps == 'menu':
+                                    return main()
+                                elif ps == False:
+                                    running = False
+                                    break
+                                elif ps == 'norm':
+                                    result = (screen, player, enemy, end, 'norm')
+                            elif state == 'menu':
+                                return main()
+
+                            if not result:
+                                running = False
+                                break
+
+                            screen, player, enemy, end, state = result
                     
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # Left click
