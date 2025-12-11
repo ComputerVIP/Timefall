@@ -1,7 +1,7 @@
 import pygame
 from pause import pause
 from classes import Click
-
+#test
 def main():
     pygame.init()
     screen = pygame.display.set_mode((800, 600))
