@@ -9,7 +9,8 @@ def map1n():
     wall4 = Wall(780, 0, 20, 600)  # Vertical wall
     walls = [wall1, wall2, wall3, wall4]
     img1 = Img(675, 425, 'Resources\\misc\\flag_txt.png')
-    return walls, [img1]
+    img2 = Img(175, 125, 'Resources\\misc\\box_txt.png')
+    return walls, [img1, img2]
 
 def map1o():
     wall1 = Wall(0, 0, 800, 20)  # Horizontal wall

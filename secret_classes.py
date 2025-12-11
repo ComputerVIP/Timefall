@@ -120,9 +120,10 @@ class Player(Base):
 
 
 class Enemy(Base):
-    def __init__(self, x, y, state = 2):
+    def __init__(self, x, y, flip = False, state = 2):
         super().__init__(x, y, state)  # Initialize Base
         self.speed = 5
+        self.flip = flip
 
         # Load original only once
         self.original_img = pygame.image.load('Resources\\opp_imgs\\opp.png')
@@ -151,14 +152,25 @@ class Enemy(Base):
 
         # Compute desired move
         dx, dy = 0, 0
-        if keys[pygame.K_w]:
-            dy -= self.speed
-        if keys[pygame.K_s]:
-            dy += self.speed
-        if keys[pygame.K_a]:
-            dx += self.speed
-        if keys[pygame.K_d]:
-            dx -= self.speed
+        if self.flip == False:
+            if keys[pygame.K_w]:
+                dy -= self.speed
+            if keys[pygame.K_s]:
+                dy += self.speed
+            if keys[pygame.K_a]:
+                dx += self.speed
+            if keys[pygame.K_d]:
+                dx -= self.speed
+        elif self.flip == True:
+            if keys[pygame.K_w]:
+                dy += self.speed
+            if keys[pygame.K_s]:
+                dy -= self.speed
+            if keys[pygame.K_a]:
+                dx -= self.speed
+            if keys[pygame.K_d]:
+                dx += self.speed
+            dx = player.x - self.x
         
         # Apply movement
         if dx != 0:
@@ -285,3 +297,27 @@ class End(Base):
         if self.img:
             rect = self.get_rect()
             surface.blit(self.img, rect)
+
+class Flip():
+    def __init__(self, x, y, width, height):
+        self.rect = pygame.Rect(x, y, width, height)
+
+    def activate(self, player, enemy):
+        if self.rect.colliderect(player.get_rect()):
+            enemy.flip = True
+        else:
+            enemy.flip = False
+        
+    def draw(self, surface, dim='norm'):
+        if dim == 'norm':
+            pygame.draw.rect(surface, (143, 63, 122), self.rect)
+        else:
+            pygame.draw.rect(surface, (106, 143, 63), self.rect)
+            
+
+class Wall:
+    def __init__(self, x, y, width, height):
+        self.rect = pygame.Rect(x, y, width, height)
+
+    def draw(self, surface, colour):
+        pygame.draw.rect(surface, colour, self.rect)

@@ -11,14 +11,14 @@ def sec_main_norm(screen, player=None, enemy=None, end=None):
     if enemy is None:
         enemy = Enemy(500, 300, 2)
     if end is None:
-        end = End(650, 450, 2, active=True, level=1) #Change level to help test, otherwise leave at 1
+        end = End(650, 450, 2, active=True, level=3) #Change level to help test, otherwise leave at 1
 
     if end.level == 1:
         walls = map1n()
     elif end.level == 2:
         walls = map2n(player, enemy, end)
     elif end.level == 3:
-        walls = map3n(player, enemy, end)
+        walls, flips = map3n(player, enemy, end)
 
     clock = pygame.time.Clock()
     last_update = 0
@@ -47,8 +47,14 @@ def sec_main_norm(screen, player=None, enemy=None, end=None):
                     elif end.level == 2:
                         walls = map2n(player, enemy, end)
                     elif end.level == 3:
-                        walls = map3n(player, enemy, end)
-
+                        walls, flips = map3n(player, enemy, end)
+        screen.fill((234, 248, 240))
+        try:
+            for f in flips:
+                f.draw(screen, 'norm')
+                f.activate(player, enemy)
+        except Exception as e:
+            return norm_main()
 
         keys = pygame.key.get_pressed()
         try:
@@ -56,8 +62,6 @@ def sec_main_norm(screen, player=None, enemy=None, end=None):
             enemy.move(keys, walls, player, 'norm')
         except Exception as e:
             return 
-        screen.fill((234, 248, 240))
-        
 
         if player.state in (0, 2):
             player.draw(screen)
@@ -75,6 +79,8 @@ def sec_main_norm(screen, player=None, enemy=None, end=None):
             i.draw(screen, (60, 142, 227))
 
         level = end.level
+
+
 
         end.next_level(player)
 

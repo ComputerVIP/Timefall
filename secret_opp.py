@@ -18,7 +18,7 @@ def sec_main_opp(screen, player=None, enemy=None, end=None):
     elif end.level == 2:
         walls = map2o(player, enemy, end)
     elif end.level == 3:
-        walls = map3o(player, enemy, end)
+        walls, flips = map3o(player, enemy, end)
 
     clock = pygame.time.Clock()
     last_update = 0
@@ -43,12 +43,17 @@ def sec_main_opp(screen, player=None, enemy=None, end=None):
                     elif end.level == 2:
                         walls = map2o(player, enemy, end)
                     elif end.level == 3:
-                        walls = map3o(player, enemy, end)
+                        walls, flips = map3o(player, enemy, end)
                 if event.key == pygame.K_SPACE:
                     return screen, player, enemy, end, 'norm'
                 if event.key == pygame.K_ESCAPE:
                     return screen, player, enemy, end, 'pause'
 
+        screen.fill((44, 4, 28))
+
+        for f in flips:
+            f.draw(screen, 'norm')
+            f.activate(player, enemy)
 
         keys = pygame.key.get_pressed()
         try:
@@ -56,8 +61,6 @@ def sec_main_opp(screen, player=None, enemy=None, end=None):
             enemy.move(keys, walls, player, 'opp')
         except Exception as e:
             return 
-        screen.fill((44, 4, 28))
-        
 
         if player.state in (0, 2):
             player.draw(screen)
