@@ -10,7 +10,7 @@ def map1n():
     walls = [wall1, wall2, wall3, wall4]
     img1 = Img(675, 425, 'Resources\\misc\\flag_txt.png')
     img2 = Img(175, 125, 'Resources\\misc\\box_txt.png')
-    img3 = Img(475, 310, 'Resources\\misc\\button_txt.png')
+    img3 = Img(475, 330, 'Resources\\misc\\button_txt.png')
     return walls, [img1, img2, img3]
 
 def map1o():
@@ -34,7 +34,8 @@ def map2n(player, box, button, end):
     wall4 = Wall(780, 0, 20, 600)  # Vertical wall
     wall5 = Wall(480, 0, 20, 600)  # Vertical wall
     walls = [wall1, wall2, wall3, wall4, wall5]
-    return walls, []
+    img1 = Img(675, 425, 'Resources\\misc\\space_up.png')
+    return walls, [img1]
 
 def map2o(player, box, button, end):
     if not end.initialized:
@@ -177,7 +178,8 @@ def map7n(player, box, button, end):
     door = Door(0, 400, 800, 20)
     walls = []
     doors = [door]
-    return walls, doors, []
+    img1 = Img(425, 525, 'Resources\\misc\\mouse_no.png')
+    return walls, doors, [img1]
 
 def map7o(player, box, button, end):
     if not end.initialized:

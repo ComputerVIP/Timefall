@@ -305,6 +305,7 @@ class Img:
     def __init__(self, x, y, img_path):
         self.x = x
         self.y = y
+        self.img_path = img_path
         self.img = pygame.image.load(img_path)
 
     def draw(self, surface):

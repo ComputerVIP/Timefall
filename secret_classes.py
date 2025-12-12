@@ -120,7 +120,7 @@ class Player(Base):
 
 
 class Enemy(Base):
-    def __init__(self, x, y, flip = False, state = 2):
+    def __init__(self, x, y, state = 2, flip = False):
         super().__init__(x, y, state)  # Initialize Base
         self.speed = 5
         self.flip = flip
@@ -148,37 +148,44 @@ class Enemy(Base):
         surface.blit(self.img, new_rect)
 
     def move(self, keys, walls, player, dim='norm'):
-        self.img = pygame.image.load('Resources\\opp_imgs\\opp.png') if dim=='norm' else pygame.image.load('Resources\\norm_imgs\\norm.png')
+        # keep image loading behavior (optional)
+        try:
+            self.img = pygame.image.load('Resources\\opp_imgs\\opp.png') if dim=='norm' else pygame.image.load('Resources\\norm_imgs\\norm.png')
+        except Exception:
+            pass
 
-        # Compute desired move
-        dx, dy = 0, 0
-        if self.flip == False:
+        # store original position for selective revert on collision
+        orig_x, orig_y = self.x, self.y
+
+        # Snap + axis-follow behavior:
+        # - not flipped: snap Y to player.y, move X toward player.x
+        # - flipped: snap X to player.x, move Y toward player.y
+        if self.flip:
+            # snap X immediately
+            self.x = player.x
+            # move Y toward player
+            dy = 0
             if keys[pygame.K_w]:
                 dy -= self.speed
-            if keys[pygame.K_s]:
+            elif keys[pygame.K_s]:
                 dy += self.speed
+            if self.x >= player.x and dy < 0:
+                dy = dy -10
+            if dy != 0:
+                self.y -= dy
+        else:
+            # snap Y immediately
+            self.y = player.y
+            # move X toward player
+            dx = 0
             if keys[pygame.K_a]:
-                dx += self.speed
-            if keys[pygame.K_d]:
                 dx -= self.speed
-        elif self.flip == True:
-            if keys[pygame.K_w]:
-                dy += self.speed
-            if keys[pygame.K_s]:
-                dy -= self.speed
-            if keys[pygame.K_a]:
-                dx -= self.speed
-            if keys[pygame.K_d]:
+            elif keys[pygame.K_d]:
                 dx += self.speed
-            dx = player.x - self.x
-        
-        # Apply movement
-        if dx != 0:
-            self.x += dx
-        if dy != 0:
-            self.y += dy
+            if dx != 0:
+                self.x -= dx
 
-        # Keep player on-screen (clamp)
+        # Keep on-screen (clamp)
         if self.x < 0:
             self.x = 0 + 13
         if self.x > 800:
@@ -187,29 +194,25 @@ class Enemy(Base):
             self.y = 0 + 13
         if self.y > 600:
             self.y = 600 - 13
-        
+
+        # Collision resolution: revert only the axis that caused collision
         for i in walls:
             if self.get_rect().colliderect(i.rect):
-                # Calculate overlap on each side
-                player_rect = self.get_rect()
-                overlap_left = player_rect.right - i.rect.left
-                overlap_right = i.rect.right - player_rect.left
-                overlap_top = player_rect.bottom - i.rect.top
-                overlap_bottom = i.rect.bottom - player_rect.top
-                
-                # Find the minimum overlap (closest edge)
-                min_overlap = min(overlap_left, overlap_right, overlap_top, overlap_bottom)
-                
-                # Push player out from the closest edge
-                if min_overlap == overlap_left and dx > 0:
-                    self.x = i.rect.left - self.get_rect().width / 2
-                elif min_overlap == overlap_right and dx < 0:
-                    self.x = i.rect.right + self.get_rect().width / 2
-                elif min_overlap == overlap_top and dy > 0:
-                    self.y = i.rect.top - self.get_rect().height / 2
-                elif min_overlap == overlap_bottom and dy < 0:
-                    self.y = i.rect.bottom + self.get_rect().height / 2
-        
+                # check overlap per axis by testing moves separately
+                # revert X if X movement caused collision
+                self.x = orig_x
+                if not self.get_rect().colliderect(i.rect):
+                    # reverting X fixed it -> keep reverted X, restore Y
+                    self.y = self.y  # nothing
+                else:
+                    # X revert didn't fix, revert Y instead
+                    self.x = self.x  # already reverted then try reverting Y
+                    self.y = orig_y
+                    # if still colliding, fully revert
+                    if self.get_rect().colliderect(i.rect):
+                        self.x, self.y = orig_x, orig_y
+
+        # collision with player: simple separation similar to before
         if self.get_rect().colliderect(player.get_rect()):
             enemy_rect = self.get_rect()
             overlap_left = enemy_rect.right - player.get_rect().left
@@ -219,13 +222,14 @@ class Enemy(Base):
 
             min_overlap = min(overlap_left, overlap_right, overlap_top, overlap_bottom)
 
-            if min_overlap == overlap_left and dx > 0:
+            # push out along the minimum overlap direction
+            if min_overlap == overlap_left:
                 self.x = player.get_rect().left - self.get_rect().width / 2
-            elif min_overlap == overlap_right and dx < 0:
+            elif min_overlap == overlap_right:
                 self.x = player.get_rect().right + self.get_rect().width / 2
-            elif min_overlap == overlap_top and dy > 0:
+            elif min_overlap == overlap_top:
                 self.y = player.get_rect().top - self.get_rect().height / 2
-            elif min_overlap == overlap_bottom and dy < 0:
+            elif min_overlap == overlap_bottom:
                 self.y = player.get_rect().bottom + self.get_rect().height / 2
 
 

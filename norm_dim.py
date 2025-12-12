@@ -41,11 +41,13 @@ def main(screen, player=None, box=None, button=None, end=None):
     frame_delay = 33
     running = True
     can_do = 0
+    can_do2 = 0
 
     while running:
         now = pygame.time.get_ticks()
         if now - last_update >= frame_delay:
             can_do += 1
+            can_do2 += 1
             last_update = now
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -130,9 +132,28 @@ def main(screen, player=None, box=None, button=None, end=None):
                 i.draw(screen, (150, 75, 0))
             else:
                 i.draw(screen, None)
-
-        for i in imgs:
-            i.draw(screen)
+        if imgs:
+            if can_do2 > 3:
+                for i in imgs:
+                    if i.x == 675 or i.x == 425:
+                        if i.img_path == 'Resources\\misc\\space_up.png':
+                            i.img_path = 'Resources\\misc\\space_down.png'
+                            i.img = pygame.image.load(i.img_path)
+                        elif i.img_path == 'Resources\\misc\\space_down.png':
+                            i.img_path = 'Resources\\misc\\space_up.png'
+                            i.img = pygame.image.load(i.img_path)
+                        if i.img_path == 'Resources\\misc\\mouse_no.png':
+                            i.img_path = 'Resources\\misc\\mouse_yes.png'
+                            i.img = pygame.image.load(i.img_path)
+                        else:
+                            if i.img_path == 'Resources\\misc\\mouse_yes.png':
+                                i.img_path = 'Resources\\misc\\mouse_no.png'
+                                i.img = pygame.image.load(i.img_path)
+                    i.draw(screen)
+                can_do2 = 0
+            else:
+                for i in imgs:
+                    i.draw(screen)
 
         level = end.level
         

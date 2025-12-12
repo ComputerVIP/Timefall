@@ -97,7 +97,6 @@ def main():
                             if not result:
                                 running = False
                                 break
-
                             screen, player, box, button, end, state = result
                     
 

@@ -4,6 +4,7 @@ from secret_maps import *
 
 def sec_main_norm(screen, player=None, enemy=None, end=None):
     from main import main as norm_main
+    print("Starting secret norm mode")
 
     # create objects if not provided
     if player is None:
@@ -54,7 +55,7 @@ def sec_main_norm(screen, player=None, enemy=None, end=None):
                 f.draw(screen, 'norm')
                 f.activate(player, enemy)
         except Exception as e:
-            return norm_main()
+            pass
 
         keys = pygame.key.get_pressed()
         try:
@@ -74,9 +75,11 @@ def sec_main_norm(screen, player=None, enemy=None, end=None):
             can_do = 0
         else:
             end.draw(screen, False)
-
-        for i in walls:
-            i.draw(screen, (60, 142, 227))
+        try:
+            for i in walls:
+                i.draw(screen, (60, 142, 227))
+        except Exception as e:
+            pass
 
         level = end.level
 
