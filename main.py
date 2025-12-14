@@ -11,7 +11,7 @@ def main():
 
     font = pygame.font.Font(None, 36)
     norm_text = font.render("Play", True, (255, 255, 255))
-    exit_txt = font.render("Exit", True, (255, 255, 255))   
+    exit_txt = font.render("Exit", True, (255, 255, 255))
 
     play = Click(200, 250, 400, 50)
     exit = Click(350, 350, 100, 50)

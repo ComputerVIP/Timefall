@@ -50,7 +50,12 @@ class Player(Base):
 
     def move(self, box, keys, walls, doors, dim='norm'):
 
-        if self.get_rect().colliderect(box.get_rect()):
+        # Only interact with box if in compatible dimensions
+        # Map dim to state: 'norm' = 0, 'opp' = 1; check if states are compatible
+        dim_state = 0 if dim == 'norm' else 1
+        box_compatible = (dim_state == box.state or dim_state == 2 or box.state == 2)
+        
+        if box_compatible and self.get_rect().colliderect(box.get_rect()):
             self.img = pygame.image.load('Resources\\norm_imgs\\box_up_norm.png') if dim=='norm' else pygame.image.load('Resources\\opp_imgs\\box_up_opp.png')
         else:
             self.img = pygame.image.load('Resources\\norm_imgs\\norm.png') if dim=='norm' else pygame.image.load('Resources\\opp_imgs\\opp.png')
@@ -69,19 +74,39 @@ class Player(Base):
         # Move X first and handle collision/pushing
         if dx != 0:
             self.x += dx
-            if self.get_rect().colliderect(box.get_rect()) and box.pushable:
+            if box_compatible and self.get_rect().colliderect(box.get_rect()) and box.pushable:
                 # try to push box horizontally; if can't, revert player
-                if not box.move(dx, 0):
+                if not box.move(dx, 0, walls):
                     self.x -= dx
 
         # Move Y next and handle collision/pushing
         if dy != 0:
             self.y += dy
-            if self.get_rect().colliderect(box.get_rect()) and box.pushable:
+            if box_compatible and self.get_rect().colliderect(box.get_rect()) and box.pushable:
                 # try to push box vertically; if can't, revert player
-                if not box.move(0, dy):
+                if not box.move(0, dy, walls):
                     self.y -= dy
-        
+        if box_compatible and self.get_rect().colliderect(box.get_rect()) and not box.pushable:
+                # Calculate overlap on each side
+                player_rect = self.get_rect()
+                box_rect = box.get_rect()
+                overlap_left = player_rect.right - box_rect.left
+                overlap_right = box_rect.right - player_rect.left
+                overlap_top = player_rect.bottom - box_rect.top
+                overlap_bottom = box_rect.bottom - player_rect.top
+                
+                # Find the minimum overlap (closest edge)
+                min_overlap = min(overlap_left, overlap_right, overlap_top, overlap_bottom)
+                
+                # Push player out from the closest edge with smaller offset for more forceful push (allows clipping)
+                if min_overlap == overlap_left and dx > 0:
+                    self.x = box_rect.left - 10
+                elif min_overlap == overlap_right and dx < 0:
+                    self.x = box_rect.right + 10
+                elif min_overlap == overlap_top and dy > 0:
+                    self.y = box_rect.top - 10
+                elif min_overlap == overlap_bottom and dy < 0:
+                    self.y = box_rect.bottom + 10
 
         # Keep player on-screen (clamp)
         if self.x < 0:
@@ -128,15 +153,15 @@ class Player(Base):
                     # Find the minimum overlap (closest edge)
                     min_overlap = min(overlap_left, overlap_right, overlap_top, overlap_bottom)
                     
-                    # Push player out from the closest edge
+                    # Push player out from the closest edge with minimal offset
                     if min_overlap == overlap_left and dx > 0:
-                        self.x = i.rect.left - self.get_rect().width / 2
+                        self.x = i.rect.left - 2
                     elif min_overlap == overlap_right and dx < 0:
-                        self.x = i.rect.right + self.get_rect().width / 2
+                        self.x = i.rect.right + 2
                     elif min_overlap == overlap_top and dy > 0:
-                        self.y = i.rect.top - self.get_rect().height / 2
+                        self.y = i.rect.top - 2
                     elif min_overlap == overlap_bottom and dy < 0:
-                        self.y = i.rect.bottom + self.get_rect().height / 2
+                        self.y = i.rect.bottom + 2
             else:
                 continue
 
@@ -154,26 +179,47 @@ class Box(Base):
         self.img = pygame.image.load('Resources\\norm_imgs\\box_norm.png') if dim=='norm' else pygame.image.load('Resources\\opp_imgs\\box_opp.png')
         surface.blit(self.img, rect)
 
-    def move(self, dx, dy):
+    def move(self, dx, dy, walls=None):
         """
         Move box by dx, dy if there's room. Returns True if box moved, False otherwise.
         This lets the player attempt to push the box and only move into it if the box can be pushed.
         """
         moved = False
+        if self.pushable:
+            # Attempt horizontal move if requested
+            if dx != 0:
+                new_x = self.x + dx
+                if 32 <= new_x <= 800 - 12:
+                    # Check for wall collisions
+                    self.x = new_x
+                    collision = False
+                    if walls:
+                        for wall in walls:
+                            if self.get_rect().colliderect(wall.rect):
+                                collision = True
+                                break
+                    if collision:
+                        self.x -= dx  # Revert if hit wall
+                    else:
+                        moved = True
 
-        # Attempt horizontal move if requested
-        if dx != 0:
-            new_x = self.x + dx
-            if 32 <= new_x <= 800 - 32:
-                self.x = new_x
-                moved = True
-
-        # Attempt vertical move if requested
-        if dy != 0:
-            new_y = self.y + dy
-            if 32 <= new_y <= 600 - 32:
-                self.y = new_y
-                moved = True
+            # Attempt vertical move if requested
+            if dy != 0:
+                new_y = self.y + dy
+                if 32 <= new_y <= 600 - 12:
+                    # Check for wall collisions
+                    self.y = new_y
+                    collision = False
+                    if walls:
+                        for wall in walls:
+                            if self.get_rect().colliderect(wall.rect):
+                                collision = True
+                                break
+                    if collision:
+                        self.y -= dy  # Revert if hit wall
+                    else:
+                        moved = True
+        
 
         return moved
     

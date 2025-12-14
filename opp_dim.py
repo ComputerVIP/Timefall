@@ -30,6 +30,8 @@ def main(screen, player=None, box=None, button=None, end=None):
         walls,doors, imgs = map7o(player, box, button, end)
     elif end.level == 8:
         walls,imgs = map8o(player, box, button, end)
+    elif end.level == 9:
+        walls, imgs = map9n(player, box, button, end)
 
     try:
         doors
@@ -74,6 +76,8 @@ def main(screen, player=None, box=None, button=None, end=None):
                         walls,doors, imgs = map7o(player, box, button, end)
                     elif end.level == 8:
                         walls, imgs = map8o(player, box, button, end)
+                    elif end.level == 9:
+                        walls, imgs = map9n(player, box, button, end)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # Left click
                     if button.get_rect().collidepoint(event.pos) and box.get_rect().collidepoint(event.pos):
@@ -100,6 +104,10 @@ def main(screen, player=None, box=None, button=None, end=None):
                             box.state = 2
 
         keys = pygame.key.get_pressed()
+        if end.level == 9 and box.state == 0:
+            box.pushable = False
+        elif end.level == 9 and box.state != 0:
+            box.pushable = True
         try:
             player.move(box, keys, walls, doors, 'opp')
         except:
