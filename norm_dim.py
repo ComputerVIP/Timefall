@@ -12,7 +12,7 @@ def main(screen, player=None, box=None, button=None, end=None):
     if button is None:
         button = Button(500, 350, 0)
     if end is None:
-        end = End(650, 450, 2, active=False, level=9) #Change level to help test, otherwise leave at 1
+        end = End(650, 450, 2, active=False, level=12) #Change level to help test, otherwise leave at 1
 
     if end.level == 1:
         walls,imgs = map1n()
@@ -32,6 +32,12 @@ def main(screen, player=None, box=None, button=None, end=None):
         walls,imgs = map8n(player, box, button, end)
     elif end.level == 9:
         walls, imgs = map9n(player, box, button, end)
+    elif end.level == 10:
+        walls, imgs = map10n(player, box, button, end)
+    elif end.level == 11:
+        walls, imgs = map11n(player, box, button, end)
+    elif end.level == 12:
+        walls, doors, imgs = map12n(player, box, button, end)
 
     try:
         doors
@@ -80,6 +86,12 @@ def main(screen, player=None, box=None, button=None, end=None):
                         walls,imgs = map8n(player, box, button, end)
                     elif end.level == 9:
                         walls, imgs = map9n(player, box, button, end)
+                    elif end.level == 10:
+                        walls, imgs = map10n(player, box, button, end)
+                    elif end.level == 11:
+                        walls, imgs = map11n(player, box, button, end)
+                    elif end.level == 12:
+                        walls, doors, imgs = map12n(player, box, button, end)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # Left click
                     if button.get_rect().collidepoint(event.pos) and box.get_rect().collidepoint(event.pos):
@@ -106,10 +118,12 @@ def main(screen, player=None, box=None, button=None, end=None):
                             box.state = 2
 
         keys = pygame.key.get_pressed()
-        if end.level == 9 and box.state == 0:
-            box.pushable = False
-        elif end.level == 9 and box.state != 0:
+        if box.state == 0:
+            if end.level == 9 or end.level ==10 or end.level == 12:
+                box.pushable = False
+        elif end.level == 9 or end.level == 10 or end.level == 12 and box.state != 0:
             box.pushable = True
+
         try:
             player.move(box, keys, walls, doors, 'norm')
         except Exception as e:

@@ -221,6 +221,26 @@ def map8o(player, box, button, end):
 
 def map9n(player, box, button, end):
     if not end.initialized:
+        player.x, player.y = 200, 200
+        box.x, box.y, box.state = 100, 150, 0
+        button.x, button.y, button.state = 300, 300, 0
+        end.x, end.y, end.active, end.initialized = 775, 575, False, True
+    wall1 = Wall(750, 550, 40, 40)
+    walls = [wall1]
+    return walls, []
+
+def map9o(player, box, button, end):
+    if not end.initialized:
+        player.x, player.y = 200, 200
+        box.x, box.y, box.state = 100, 150, 0
+        button.x, button.y, button.state = 300, 300, 0
+        end.x, end.y, end.active, end.initialized = 775, 575, False, True
+    wall1 = Wall(750, 550, 40, 40)
+    walls = [wall1]
+    return walls, []
+
+def map10n(player, box, button, end):
+    if not end.initialized:
         player.x, player.y = 100, 100
         box.x, box.y, box.state = 400, 300, 1
         button.x, button.y, button.state = 500, 300, 0
@@ -230,7 +250,7 @@ def map9n(player, box, button, end):
     walls = [wall1, wall2]
     return walls, []
 
-def map9o(player, box, button, end):
+def map10o(player, box, button, end):
     if not end.initialized:
         player.x, player.y = 100, 100
         box.x, box.y, box.state = 400, 300, 1
@@ -239,4 +259,50 @@ def map9o(player, box, button, end):
     wall1 = Wall(0, 405, 800, 5)  # Horizontal wall
     wall2 = Wall(790, 0, 10, 600)  # Vertical wall
     walls = [wall1, wall2]
+    return walls, []
+
+def map11n(player, box, button, end):
+    if not end.initialized:
+        player.x, player.y = 100, 100
+        box.x, box.y, box.state = 400, 500, 1
+        button.x, button.y, button.state = 500, 500, 0
+        end.x, end.y, end.active, end.initialized = 750, 550, False, True
+    wall1 = Wall(0, 295, 800, 20)  # Horizontal wall
+    walls = [wall1]
+    return walls, []
+
+def map11o(player, box, button, end):
+    if not end.initialized:
+        player.x, player.y = 100, 100
+        box.x, box.y, box.state = 400, 500, 1
+        button.x, button.y, button.state = 500, 500, 0
+        end.x, end.y, end.active, end.initialized = 750, 550, False, True
+    door1 = Door(0, 300, 800, 20)
+    walls = []
+    doors = [door1]
+    return walls, doors, []
+
+def map12n(player, box, button, end):
+    if not end.initialized:
+        player.x, player.y = 100, 100
+        box.x, box.y, box.state = 700, 300, 0
+        button.x, button.y, button.state = 400, 500, 1
+        end.x, end.y, end.active, end.initialized = 50, 50, True, True
+    wall2 = Wall(600, 100, 20, 490)
+    wall3 = Wall(100, 10, 5, 70)
+    walls = [wall2, wall3]
+    door1 = Door(0, 75, 620, 20)
+    doors = [door1]
+    return walls, doors, []
+
+def map12o(player, box, button, end):
+    if not end.initialized:
+        player.x, player.y = 100, 100
+        box.x, box.y, box.state = 700, 300, 0
+        button.x, button.y, button.state = 400, 500, 1
+        end.x, end.y, end.active, end.initialized = 50, 50, True, True
+    wall1 = Wall(0, 75, 610, 20)
+    wall2 = Wall(600, 75, 20, 510)
+    wall3 = Wall(100, 10, 5, 70)
+    walls = [wall1, wall2, wall3]
     return walls, []

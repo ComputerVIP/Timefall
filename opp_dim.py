@@ -31,7 +31,13 @@ def main(screen, player=None, box=None, button=None, end=None):
     elif end.level == 8:
         walls,imgs = map8o(player, box, button, end)
     elif end.level == 9:
-        walls, imgs = map9n(player, box, button, end)
+        walls, imgs = map9o(player, box, button, end)
+    elif end.level == 10:
+        walls, imgs = map10o(player, box, button, end)
+    elif end.level == 11:
+        walls, doors, imgs = map11o(player, box, button, end)
+    elif end.level == 12:
+        walls, imgs = map12o(player, box, button, end)
 
     try:
         doors
@@ -77,7 +83,13 @@ def main(screen, player=None, box=None, button=None, end=None):
                     elif end.level == 8:
                         walls, imgs = map8o(player, box, button, end)
                     elif end.level == 9:
-                        walls, imgs = map9n(player, box, button, end)
+                        walls, imgs = map9o(player, box, button, end)
+                    elif end.level == 10:
+                        walls, imgs = map10o(player, box, button, end)
+                    elif end.level == 11:
+                        walls, doors, imgs = map11o(player, box, button, end)
+                    elif end.level == 12:
+                        walls, imgs = map12o(player, box, button, end)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # Left click
                     if button.get_rect().collidepoint(event.pos) and box.get_rect().collidepoint(event.pos):
