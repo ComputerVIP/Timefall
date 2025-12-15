@@ -121,7 +121,7 @@ def main(screen, player=None, box=None, button=None, end=None):
         if box.state == 0:
             if end.level == 9 or end.level ==10 or end.level == 12:
                 box.pushable = False
-        elif end.level == 9 or end.level == 10 or end.level == 12 and box.state != 0:
+        elif end.level == 9 or end.level == 10 or end.level ==11 or end.level == 12 and box.state != 0:
             box.pushable = True
 
         try:

@@ -284,25 +284,29 @@ def map11o(player, box, button, end):
 
 def map12n(player, box, button, end):
     if not end.initialized:
-        player.x, player.y = 100, 100
+        player.x, player.y = 200, 200
         box.x, box.y, box.state = 700, 300, 0
         button.x, button.y, button.state = 400, 500, 1
         end.x, end.y, end.active, end.initialized = 50, 50, True, True
     wall2 = Wall(600, 100, 20, 490)
-    wall3 = Wall(100, 10, 5, 70)
-    walls = [wall2, wall3]
-    door1 = Door(0, 75, 620, 20)
+    wall3 = Wall(100, 0, 20, 70)
+    wall4 = Wall(0, 125, 100, 20)
+    wall5 = Wall(90, 90, 10, 30)
+    walls = [wall2, wall3, wall4, wall5]
+    door1 = Door(100, 75, 520, 20)
     doors = [door1]
     return walls, doors, []
 
 def map12o(player, box, button, end):
     if not end.initialized:
-        player.x, player.y = 100, 100
+        player.x, player.y = 200, 200
         box.x, box.y, box.state = 700, 300, 0
         button.x, button.y, button.state = 400, 500, 1
         end.x, end.y, end.active, end.initialized = 50, 50, True, True
     wall1 = Wall(0, 75, 610, 20)
     wall2 = Wall(600, 75, 20, 510)
-    wall3 = Wall(100, 10, 5, 70)
-    walls = [wall1, wall2, wall3]
+    wall3 = Wall(100, 0, 20, 70)
+    wall4 = Wall(0, 125, 100, 20)
+    wall5 = Wall(90, 90, 10, 30)
+    walls = [wall1, wall2, wall3, wall4, wall5]
     return walls, []
