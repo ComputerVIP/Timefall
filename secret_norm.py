@@ -12,7 +12,7 @@ def sec_main_norm(screen, player=None, enemy=None, end=None):
     if enemy is None:
         enemy = Enemy(500, 300, 2)
     if end is None:
-        end = End(650, 450, 2, active=True, level=3) #Change level to help test, otherwise leave at 1
+        end = End(650, 450, 2, active=True, level=1) #Change level to help test, otherwise leave at 1
 
     if end.level == 1:
         walls = map1n()
